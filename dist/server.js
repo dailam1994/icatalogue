@@ -15,7 +15,7 @@ const booking_route_1 = require("./entities/booking/booking.route");
 exports.fastify = (0, fastify_1.default)();
 exports.prisma = new client_1.PrismaClient();
 exports.fastify.register(require('fastify-cors'), {
-    origin: 'http://localhost:3000',
+    origin: 'https://ux19940827.herokuapp.com/login',
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     credentials: true
 });
@@ -31,7 +31,7 @@ exports.fastify.register(fastify_session_1.default, {
         secure: false,
         httpOnly: false,
         // maxAge: 30 * 60 * 1000, // 30-minute sessions
-        sameSite: 'none'
+        sameSite: ''
     },
 });
 // fastify.register(rateLimit, {

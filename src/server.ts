@@ -11,7 +11,7 @@ import { bookingRouter } from './entities/booking/booking.route'
 export const fastify = Fastify()
 export const prisma = new PrismaClient()
 fastify.register(require('fastify-cors'), {
-    origin: 'http://localhost:3000',
+    origin: 'https://ux19940827.herokuapp.com/login',
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     credentials: true
 })
@@ -28,7 +28,7 @@ fastify.register(fastifySession, {
         secure: false,
         httpOnly: false,
         // maxAge: 30 * 60 * 1000, // 30-minute sessions
-        sameSite: 'none'
+        sameSite: ''
     },
 })
 // fastify.register(rateLimit, {
