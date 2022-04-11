@@ -1,3 +1,3 @@
-web: node dist/server.js
+web: node dist/index.js
 
 release: npx prisma migrate deploy
