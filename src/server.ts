@@ -24,9 +24,11 @@ fastify.register(fastifySession, {
     secret: '27b12d17291a1805fd141c9a38d6e1051b0f',
     saveUninitialized: false,
     cookie: {
-        secure: false,
+        domain: 'example.com',
+        secure: true,
+        httpOnly: false,
         // maxAge: 30 * 60 * 1000, // 30-minute sessions
-        // sameSite: false
+        sameSite: 'none'
     },
 })
 // fastify.register(rateLimit, {
