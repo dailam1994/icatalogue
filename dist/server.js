@@ -29,7 +29,7 @@ exports.fastify.register(fastify_session_1.default, {
     cookie: {
         domain: 'example.com',
         path: '/',
-        secure: true,
+        secure: false,
         httpOnly: false,
         // maxAge: 30 * 60 * 1000, // 30-minute sessions
         sameSite: 'none'
