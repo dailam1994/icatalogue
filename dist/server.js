@@ -27,7 +27,6 @@ exports.fastify.register(fastify_session_1.default, {
     secret: '27b12d17291a1805fd141c9a38d6e1051b0f',
     saveUninitialized: false,
     cookie: {
-        domain: 'example.com',
         path: '/',
         secure: false,
         httpOnly: false,
