@@ -1,0 +1,65 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model user {
+  userID      String        @id @unique @default(uuid())
+  firstName   String        @db.VarChar(200)
+  lastName    String        @db.VarChar(200)
+  dateOfBirth DateTime      @db.Date
+  email       String        @unique @db.VarChar(200)
+  username    String        @unique @db.VarChar(200)
+  password    String        @db.VarChar(255)
+  roles       Role          @default(CLIENT)
+  bookList    bookingList[]
+  changelog   changelog[]
+}
+
+model availability {
+  availabilityID String   @id @unique @default(uuid())
+  date           DateTime @db.Timestamp(6)
+  startTime      DateTime @db.Timestamp(6)
+  endTime        DateTime @db.Timestamp(6)
+}
+
+model bookingList {
+  bookingListID    String   @id @unique @default(uuid())
+  userUserID       String?
+  bookingBookingID String?
+  booking          booking? @relation(fields: [bookingBookingID], references: [bookingID], onDelete: Cascade)
+  user             user?    @relation(fields: [userUserID], references: [userID], onDelete: Cascade)
+}
+
+model booking {
+  bookingID     String        @id @unique @default(uuid())
+  date          DateTime      @db.Timestamp(6)
+  startTime     DateTime      @db.Timestamp(6)
+  endTime       DateTime      @db.Timestamp(6)
+  firstService  String?       @db.VarChar(50)
+  secondService String?       @db.VarChar(50)
+  thirdService  String?       @db.VarChar(50)
+  fourthService String?       @db.VarChar(50)
+  fifthService  String?       @db.VarChar(50)
+  bookingList   bookingList[]
+  changelog     changelog[]
+}
+
+model changelog {
+  changelogID      String    @id @unique @default(uuid())
+  dateCreated      DateTime? @default(now())
+  dateChanged      DateTime? @default(now()) @updatedAt
+  userUserID       String?
+  bookingBookingID String?
+  booking          booking?  @relation(fields: [bookingBookingID], references: [bookingID], onDelete: Cascade)
+  user             user?     @relation(fields: [userUserID], references: [userID], onDelete: Cascade)
+}
+
+enum Role {
+  ADMIN
+  CLIENT
+}
