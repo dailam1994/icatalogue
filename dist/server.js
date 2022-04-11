@@ -15,7 +15,7 @@ const booking_route_1 = require("./entities/booking/booking.route");
 exports.fastify = (0, fastify_1.default)();
 exports.prisma = new client_1.PrismaClient();
 exports.fastify.register(require('fastify-cors'), {
-    origin: '*',
+    origin: 'http://localhost:3000',
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     credentials: true
 });

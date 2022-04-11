@@ -11,7 +11,7 @@ import { bookingRouter } from './entities/booking/booking.route'
 export const fastify = Fastify()
 export const prisma = new PrismaClient()
 fastify.register(require('fastify-cors'), {
-    origin: '*',
+    origin: 'http://localhost:3000',
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     credentials: true
 })
