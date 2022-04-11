@@ -25,6 +25,7 @@ fastify.register(fastifySession, {
     saveUninitialized: false,
     cookie: {
         domain: 'example.com',
+        path: '/',
         secure: true,
         httpOnly: false,
         // maxAge: 30 * 60 * 1000, // 30-minute sessions
