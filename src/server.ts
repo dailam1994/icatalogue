@@ -13,7 +13,7 @@ export const prisma = new PrismaClient()
 
 /* Register Plugins */
 fastify.register(require('fastify-cors'), {
-    origin: 'http://localhost:3000',
+    origin: ['*', 'http://localhost:3000'],
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     credentials: true
 })
