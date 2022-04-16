@@ -23,9 +23,10 @@ exports.allUsers = {
         }
     },
     handler: (request, reply) => __awaiter(void 0, void 0, void 0, function* () {
-        console.log(request.session);
+        // Checking is a user is auth and is the correct user role
         if (request.session.authenticated === true && request.session.user.role === 'ADMIN') {
             try {
+                // GET ALL Users
                 const users = yield server_1.prisma.user.findMany();
                 if (!users) {
                     reply.status(400).send("Error Message: (400) Status");

@@ -22,6 +22,7 @@ exports.deleteBooking = {
     handler: (request, reply) => __awaiter(void 0, void 0, void 0, function* () {
         try {
             const { id } = request.params;
+            // DELETE Book by ID
             const deleteBooking = yield server_1.prisma.booking.delete({
                 where: { bookingID: String(id) }
             });

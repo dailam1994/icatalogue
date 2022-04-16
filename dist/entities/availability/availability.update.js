@@ -21,10 +21,12 @@ exports.updateAvailability = {
         },
     },
     handler: (request, reply) => __awaiter(void 0, void 0, void 0, function* () {
+        // Checking is a user is auth and is the correct user role
         if (request.session.authenticated === true && request.session.user.role === 'ADMIN') {
             try {
                 const { id } = request.params;
                 const { date, startTime, endTime } = request.body;
+                // UPDATE Availability by ID
                 const updateAvailability = yield server_1.prisma.availability.update({
                     where: { availabilityID: String(id) },
                     data: {

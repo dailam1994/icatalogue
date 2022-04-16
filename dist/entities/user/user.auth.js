@@ -9,33 +9,25 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteUser = void 0;
-const server_1 = require("../../server");
+exports.authUser = void 0;
 const user_type_1 = require("./user.type");
-// DELETE A User
-exports.deleteUser = {
+// GET Auth User
+exports.authUser = {
     schema: {
         response: {
-            200: user_type_1.deleteItem
-        },
+            200: user_type_1.authStatus
+        }
     },
     handler: (request, reply) => __awaiter(void 0, void 0, void 0, function* () {
-        if (request.session.authenticated === true && request.session.user.role === 'ADMIN') {
-            try {
-                const { id } = request.params;
-                const deleteUser = yield server_1.prisma.user.delete({
-                    where: { userID: String(id) }
-                });
-                if (!deleteUser) {
-                    reply.status(400).send("Error Message: (400) Status");
-                }
-                reply.status(200).send(`User ${id} deleted successfully`);
-                console.log('Deleted A User successfully!');
-            }
-            catch (error) {
-                reply.status(500).send("Error Message: (500) Status");
-                console.log(error);
-            }
+        try {
+            // Creating data for handling session
+            const session = request.session;
+            reply.status(200).send(session);
+            // console.log('Read Auth User successfully!')
+        }
+        catch (error) {
+            reply.status(500).send("Error Message: (500) Status");
+            console.log(error);
         }
         reply.status(401).send('Error Message: (401) Status');
     })

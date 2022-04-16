@@ -12,9 +12,12 @@ export const deleteAvailability = {
     handler: async (request: FastifyRequest<{
         Params: { id: string },
     }>, reply: FastifyReply) => {
+        // Checking is a user is auth and is the correct user role
         if (request.session.authenticated === true && request.session.user.role === 'ADMIN') {
             try {
                 const { id } = request.params
+
+                // DELETE Availability by ID
                 const deleteAvailability = await prisma.availability.delete({
                     where: { availabilityID: String(id) }
                 })

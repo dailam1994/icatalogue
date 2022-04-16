@@ -22,6 +22,7 @@ exports.booking = {
     handler: (request, reply) => __awaiter(void 0, void 0, void 0, function* () {
         try {
             const { id } = request.params;
+            // GET Book by ID
             const booking = yield server_1.prisma.booking.findUnique({
                 where: { bookingID: String(id) },
             });

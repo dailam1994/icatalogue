@@ -14,6 +14,8 @@ export const deleteBooking = {
     }>, reply: FastifyReply) => {
         try {
             const { id } = request.params
+            
+            // DELETE Book by ID
             const deleteBooking = await prisma.booking.delete({
                 where: { bookingID: String(id) }
             })

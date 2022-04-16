@@ -27,6 +27,8 @@ export const updateBooking = {
             const { id } = request.params
             const { date, startTime, endTime, firstService, secondService,
                 thirdService, fourthService, fifthService } = request.body;
+
+            // UPDATE Book by ID
             const updateBooking = await prisma.booking.update({
                 where: { bookingID: String(id) },
                 data: {

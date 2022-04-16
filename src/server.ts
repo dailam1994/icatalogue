@@ -10,8 +10,10 @@ import { bookingRouter } from './entities/booking/booking.route'
 
 export const fastify = Fastify()
 export const prisma = new PrismaClient()
+
+/* Register Plugins */
 fastify.register(require('fastify-cors'), {
-    origin: 'https://ux19940827.herokuapp.com',
+    origin: 'http://localhost:3000',
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     credentials: true
 })
@@ -24,48 +26,75 @@ fastify.register(fastifySession, {
     secret: '27b12d17291a1805fd141c9a38d6e1051b0f',
     saveUninitialized: false,
     cookie: {
-        path: '/',
-        secure: true,
-        httpOnly: false,
+        secure: false,
         // maxAge: 30 * 60 * 1000, // 30-minute sessions
-        sameSite: 'none'
     },
 })
-// fastify.register(rateLimit, {
-//     max: 1,
-//     timeWindow: '1 second',
-//     // whitelist: ['127.0.0.1']
-// })
-// fastify.register(rateLimit, {
-//     max: 1000,
-//     timeWindow: '24 hour',
-//     // whitelist: ['127.0.0.1']
-// })
 
+// Rate Limits
+fastify.register(rateLimit, {
+    max: 1,
+    timeWindow: '1 second',
+    // whitelist: ['127.0.0.1']
+})
+
+fastify.register(rateLimit, {
+    max: 1000,
+    timeWindow: '24 hour',
+    // whitelist: ['127.0.0.1']
+})
+
+/* Register Routes */ 
 fastify.register(userRouter)
 fastify.register(availabilityRouter)
 fastify.register(bookingRouter)
 
-// fastify.addHook('preHandler', (request, reply, next) => {
-//     let userLoggedIn = request.session.user !== undefined
-//     // let userLoggedIn = true
-//     let allowedURLs = ['/api/user/login']
+/* Middleware for preHandler of application */
+fastify.addHook('preHandler', async (request, reply, next) => {
+    let userLoggedIn = request.session.user !== undefined
+    // let userLoggedIn = true
+    let allowedURLs = ['/api/user/login', '/api/user/auth']
 
-//     if (userLoggedIn) {
-//         let loggingFeature = {
-//             session: request.session,
-//             ipAddress: request.ip,
-//             time: new Date(),
-//             action: request.method
-//         }
+    // Checking if user has logged in
+    if (userLoggedIn) {
+        // GET User Logging Data by Username
+        const loggingData = await prisma.logging.findMany({
+            where: {
+                username: request.session.user.username
+            }
+        })
 
-//         console.log(loggingFeature)
-//         next()
-//     } else {
-//         if (allowedURLs.includes(request.url)) {
-//             next()
-//         } else {
-//             reply.redirect('/api/user/login')
-//         }
-//     }
-// })
+        // Looping through the logging data
+        for (let i of loggingData) {
+            // Auto DELETE logging data that becomes stale after 1 day (recommended 10-30days)
+            if (new Date(new Date(i.timestamp).setDate(new Date(i.timestamp).getDate() + 1)) < new Date()) {
+                await prisma.logging.deleteMany({
+                    where: {
+                        username: i.username
+                    }
+                })
+            }
+        }
+
+        // CREATE logging feature via every request w.r.t to a logged in user
+        await prisma.logging.create({
+            data: {
+                ip: String(request.ip),
+                session: String(JSON.stringify(request.session)),
+                username: String(request.session.user.username),
+                usertype: String(request.session.user.role),
+                timestamp: String(new Date().toISOString()),
+                action: String(request.method)
+            }
+        })
+
+        next()
+    } else {
+        if (allowedURLs.includes(request.url)) {
+            next()
+        } else {
+            reply.redirect('/api/user/login')
+        }
+    }
+})
+

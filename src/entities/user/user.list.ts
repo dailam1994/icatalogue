@@ -13,9 +13,10 @@ export const allUsers = {
         }
     },
     handler: async (request: FastifyRequest, reply: FastifyReply) => {
-        console.log(request.session)
+        // Checking is a user is auth and is the correct user role
         if (request.session.authenticated === true && request.session.user.role === 'ADMIN') {
             try {
+                // GET ALL Users
                 const users = await prisma.user.findMany()
 
                 if (!users) {

@@ -17,10 +17,12 @@ export const createAvailability = {
             endTime: string
         }
     }>, reply: FastifyReply) => {
+        // Checking is a user is auth and is the correct user role
         if (request.session.authenticated === true && request.session.user.role === 'ADMIN') {
             try {
                 const { date, startTime, endTime } = request.body;
 
+                // CREATE Availability
                 const addAvailability = await prisma.availability.create({
                     data: {
                         date: String(new Date(date).toISOString()),

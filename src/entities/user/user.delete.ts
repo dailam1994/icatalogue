@@ -12,9 +12,11 @@ export const deleteUser = {
     handler: async (request: FastifyRequest<{
         Params: { id: string },
     }>, reply: FastifyReply) => {
+        // Checking is a user is auth and is the correct user role
         if (request.session.authenticated === true && request.session.user.role === 'ADMIN') {
             try {
                 const { id } = request.params
+                // DELETE User by ID
                 const deleteUser = await prisma.user.delete({
                     where: { userID: String(id) }
                 })

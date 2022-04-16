@@ -1,6 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.deleteItem = exports.modifyItem = exports.Items = void 0;
+/* Availability Types and Schema Validations */
 exports.Items = {
     type: "object",
     properties: {

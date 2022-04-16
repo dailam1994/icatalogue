@@ -12,9 +12,12 @@ export const user = {
     handler: async (request: FastifyRequest<{
         Params: { id: string }
     }>, reply: FastifyReply) => {
+        // Checking is a user is auth and is the correct user role
         if (request.session.authenticated === true && request.session.user.role === 'ADMIN') {
             try {
                 const { id } = request.params
+
+                // GET User by ID
                 const user = await prisma.user.findUnique({
                     where: { userID: String(id) },
                 })

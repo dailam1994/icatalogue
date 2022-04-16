@@ -20,9 +20,11 @@ exports.user = {
         }
     },
     handler: (request, reply) => __awaiter(void 0, void 0, void 0, function* () {
+        // Checking is a user is auth and is the correct user role
         if (request.session.authenticated === true && request.session.user.role === 'ADMIN') {
             try {
                 const { id } = request.params;
+                // GET User by ID
                 const user = yield server_1.prisma.user.findUnique({
                     where: { userID: String(id) },
                 });

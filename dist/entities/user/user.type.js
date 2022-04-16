@@ -1,6 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.loginStatus = exports.loginItem = exports.deleteItem = exports.modifyItem = exports.Items = void 0;
+exports.authStatus = exports.loginStatus = exports.loginItem = exports.deleteItem = exports.modifyItem = exports.Items = void 0;
+/* User Types and Schema Validations */
 exports.Items = {
     type: "object",
     properties: {
@@ -47,7 +48,34 @@ exports.loginItem = {
 exports.loginStatus = {
     type: 'object',
     properties: {
-        username: { type: 'string' },
-        password: { type: 'string' },
+        message: { type: 'string' },
+    }
+};
+exports.authStatus = {
+    type: 'object',
+    properties: {
+        expires: { type: 'string' },
+        sessionId: { type: 'string' },
+        encryptedSessionId: { type: 'string' },
+        authenticated: { type: 'boolean' },
+        user: {
+            type: 'object',
+            properties: {
+                userId: { type: 'string' },
+                username: { type: 'string' },
+                role: { type: 'string' },
+            }
+        },
+        cookie: {
+            type: 'object',
+            properties: {
+                maxAge: { type: 'number' },
+                path: { type: 'string' },
+                httpOnly: { type: 'boolean' },
+                secure: { type: 'boolean' },
+                sameSite: { type: ["string", "null"] },
+                domain: { type: ["string", "null"] }
+            }
+        }
     }
 };

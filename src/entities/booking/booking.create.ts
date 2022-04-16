@@ -26,6 +26,7 @@ export const createBooking = {
             const { date, startTime, endTime, firstService, secondService,
                 thirdService, fourthService, fifthService } = request.body;
 
+            // CREATE Book
             const addBooking = await prisma.booking.create({
                 data: {
                     date: String(new Date(date).toISOString()),
@@ -39,7 +40,7 @@ export const createBooking = {
                 }
             })
 
-
+            // GET ALL Books by Date/Time      
             const id = await prisma.booking.findMany({
                 where: {
                     date: String(new Date(date).toISOString()),
@@ -48,7 +49,7 @@ export const createBooking = {
                 }
             })
 
-            // Missing userID from user Session
+            // CREATE Booking List
             await prisma.bookingList.create({
                 data: {
                     bookingBookingID: String(id[0].bookingID)

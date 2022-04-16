@@ -14,6 +14,7 @@ export const allAvailability = {
     },
     handler: async (_request: FastifyRequest, reply: FastifyReply) => {
         try {
+            // GET ALL Availabilities
             const availabilities = await prisma.availability.findMany()
 
             if (!availabilities) {

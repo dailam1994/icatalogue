@@ -21,14 +21,17 @@ exports.updateUser = {
         },
     },
     handler: (request, reply) => __awaiter(void 0, void 0, void 0, function* () {
+        // Checking is a user is auth and is the correct user role
         if (request.session.authenticated === true && request.session.user.role === 'ADMIN') {
             try {
                 const { id } = request.params;
                 const { firstName, lastName, dateOfBirth, email, username, password, roles } = request.body;
+                // Hashing updated user password
                 let hashedPassword = server_1.fastify.bcrypt.hash(password);
                 if (!password.startsWith("$2b$06$")) {
                     hashedPassword = server_1.fastify.bcrypt.hash(password);
                 }
+                // UPDATE User by ID
                 const updateUser = yield server_1.prisma.user.update({
                     where: { userID: String(id) },
                     data: {

@@ -24,6 +24,7 @@ exports.allAvailability = {
     },
     handler: (_request, reply) => __awaiter(void 0, void 0, void 0, function* () {
         try {
+            // GET ALL Availabilities
             const availabilities = yield server_1.prisma.availability.findMany();
             if (!availabilities) {
                 reply.status(400).send("Error Message: (400) Status");

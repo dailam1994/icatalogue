@@ -21,10 +21,13 @@ exports.createUser = {
         },
     },
     handler: (request, reply) => __awaiter(void 0, void 0, void 0, function* () {
+        // Checking is a user is auth and is the correct user role
         // if (request.session.authenticated === true && request.session.user.role === 'ADMIN') {
         try {
             const { firstName, lastName, dateOfBirth, email, username, password, roles } = request.body;
+            // Perform password hashing
             const hashedPassword = yield server_1.fastify.bcrypt.hash(password);
+            // CREATE User Account
             const addUser = yield server_1.prisma.user.create({
                 data: {
                     firstName: String(firstName),

@@ -1,3 +1,4 @@
+/* User Types and Schema Validations */
 export const Items = {
     type: "object",
     properties: {
@@ -48,7 +49,36 @@ export const loginItem = {
 export const loginStatus = {
     type: 'object',
     properties: {
-        username: { type: 'string' },
-        password: { type: 'string' },
+        message: { type: 'string' },
     }
 }
+
+export const authStatus = {
+    type: 'object',
+    properties: {
+        expires: { type: 'string' },
+        sessionId: { type: 'string' },
+        encryptedSessionId: { type: 'string' },
+        authenticated: { type: 'boolean' },
+        user: {
+            type: 'object',
+            properties: {
+                userId: { type: 'string' },
+                username: { type: 'string' },
+                role: { type: 'string' },
+            }
+        },
+        cookie: {
+            type: 'object',
+            properties: {
+                maxAge: { type: 'number' },
+                path: { type: 'string' },
+                httpOnly: { type: 'boolean' },
+                secure: { type: 'boolean' },
+                sameSite: { type: ["string", "null"] },
+                domain: { type: ["string", "null"] }
+            }
+        }
+    }
+}
+

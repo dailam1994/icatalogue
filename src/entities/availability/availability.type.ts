@@ -1,3 +1,4 @@
+/* Availability Types and Schema Validations */
 export const Items = {
     type: "object",
     properties: {

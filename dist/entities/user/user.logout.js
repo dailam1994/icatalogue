@@ -19,7 +19,7 @@ exports.logoutUser = {
         },
     },
     handler: (request, reply) => __awaiter(void 0, void 0, void 0, function* () {
-        console.log(request.session);
+        // Checking if a user w/in a session is authenticated
         if (!request.session.authenticated) {
             reply.status(400).send("Error Message: (400) Status");
         }

@@ -18,11 +18,13 @@ export const updateAvailability = {
             endTime: string
         }
     }>, reply: FastifyReply) => {
+        // Checking is a user is auth and is the correct user role
         if (request.session.authenticated === true && request.session.user.role === 'ADMIN') {
             try {
                 const { id } = request.params
                 const { date, startTime, endTime } = request.body;
 
+                // UPDATE Availability by ID
                 const updateAvailability = await prisma.availability.update({
                     where: { availabilityID: String(id) },
                     data: {

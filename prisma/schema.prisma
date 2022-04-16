@@ -7,6 +7,7 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+// Application Schema Models
 model user {
   userID      String        @id @unique @default(uuid())
   firstName   String        @db.VarChar(200)
@@ -57,6 +58,16 @@ model changelog {
   bookingBookingID String?
   booking          booking?  @relation(fields: [bookingBookingID], references: [bookingID], onDelete: Cascade)
   user             user?     @relation(fields: [userUserID], references: [userID], onDelete: Cascade)
+}
+
+model logging {
+  loggingID String @id @unique @default(uuid())
+  ip        String @db.VarChar(200)
+  session   String @db.VarChar(500)
+  username  String @db.VarChar(200)
+  usertype  String @db.VarChar(200)
+  timestamp String @db.VarChar(50)
+  action    String @db.VarChar(50)
 }
 
 enum Role {

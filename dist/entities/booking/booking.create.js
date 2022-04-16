@@ -23,6 +23,7 @@ exports.createBooking = {
     handler: (request, reply) => __awaiter(void 0, void 0, void 0, function* () {
         try {
             const { date, startTime, endTime, firstService, secondService, thirdService, fourthService, fifthService } = request.body;
+            // CREATE Book
             const addBooking = yield server_1.prisma.booking.create({
                 data: {
                     date: String(new Date(date).toISOString()),
@@ -35,6 +36,7 @@ exports.createBooking = {
                     fifthService: String(fifthService),
                 }
             });
+            // GET ALL Books by Date/Time      
             const id = yield server_1.prisma.booking.findMany({
                 where: {
                     date: String(new Date(date).toISOString()),
@@ -42,7 +44,7 @@ exports.createBooking = {
                     endTime: String(new Date(`${date} ${endTime}`).toISOString()),
                 }
             });
-            // Missing userID from user Session
+            // CREATE Booking List
             yield server_1.prisma.bookingList.create({
                 data: {
                     bookingBookingID: String(id[0].bookingID)

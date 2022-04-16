@@ -17,7 +17,8 @@ const user_update_1 = require("./user.update");
 const user_delete_1 = require("./user.delete");
 const user_login_1 = require("./user.login");
 const user_logout_1 = require("./user.logout");
-// Routes for User
+const user_auth_1 = require("./user.auth");
+// Routes for Users
 const userRouter = (fastify) => __awaiter(void 0, void 0, void 0, function* () {
     // RESTapi endpoints
     fastify.get('/api/users', user_list_1.allUsers);
@@ -27,5 +28,6 @@ const userRouter = (fastify) => __awaiter(void 0, void 0, void 0, function* () {
     fastify.delete('/api/user/:id', user_delete_1.deleteUser);
     fastify.post('/api/user/login', user_login_1.loginUser);
     fastify.post('/api/user/logout', user_logout_1.logoutUser);
+    fastify.get('/api/user/auth', user_auth_1.authUser);
 });
 exports.userRouter = userRouter;

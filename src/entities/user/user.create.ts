@@ -24,13 +24,16 @@ export const createUser = {
             roles: roles
         }
     }>, reply: FastifyReply) => {
+        // Checking is a user is auth and is the correct user role
         // if (request.session.authenticated === true && request.session.user.role === 'ADMIN') {
         try {
             const { firstName, lastName, dateOfBirth, email, username, password,
                 roles } = request.body;
 
+            // Perform password hashing
             const hashedPassword = await fastify.bcrypt.hash(password)
 
+            // CREATE User Account
             const addUser = await prisma.user.create({
                 data: {
                     firstName: String(firstName),

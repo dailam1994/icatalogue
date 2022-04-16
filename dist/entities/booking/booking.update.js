@@ -24,6 +24,7 @@ exports.updateBooking = {
         try {
             const { id } = request.params;
             const { date, startTime, endTime, firstService, secondService, thirdService, fourthService, fifthService } = request.body;
+            // UPDATE Book by ID
             const updateBooking = yield server_1.prisma.booking.update({
                 where: { bookingID: String(id) },
                 data: {

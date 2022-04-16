@@ -6,8 +6,9 @@ import { updateUser } from './user.update'
 import { deleteUser } from './user.delete'
 import { loginUser } from './user.login'
 import { logoutUser } from './user.logout'
+import { authUser } from './user.auth'
 
-// Routes for User
+// Routes for Users
 export const userRouter = async (fastify: FastifyInstance) => {
     // RESTapi endpoints
     fastify.get('/api/users', allUsers)
@@ -17,4 +18,5 @@ export const userRouter = async (fastify: FastifyInstance) => {
     fastify.delete('/api/user/:id', deleteUser)
     fastify.post('/api/user/login', loginUser)
     fastify.post('/api/user/logout', logoutUser)
+    fastify.get('/api/user/auth', authUser)
 }

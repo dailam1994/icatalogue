@@ -14,6 +14,7 @@ export const allBookings = {
     },
     handler: async (_request: FastifyRequest, reply: FastifyReply) => {
         try {
+            // GET ALL Books
             const bookings = await prisma.booking.findMany()
 
             if (!bookings) {

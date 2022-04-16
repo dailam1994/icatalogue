@@ -14,6 +14,8 @@ export const availability = {
     }>, reply: FastifyReply) => {
         try {
             const { id } = request.params
+
+            // GET Availability by ID
             const availability = await prisma.availability.findUnique({
                 where: { availabilityID: String(id) },
             })

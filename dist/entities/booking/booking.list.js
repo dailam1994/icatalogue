@@ -24,6 +24,7 @@ exports.allBookings = {
     },
     handler: (_request, reply) => __awaiter(void 0, void 0, void 0, function* () {
         try {
+            // GET ALL Books
             const bookings = yield server_1.prisma.booking.findMany();
             if (!bookings) {
                 reply.status(400).send("Error Message: (400) Status");

@@ -22,6 +22,7 @@ exports.availability = {
     handler: (request, reply) => __awaiter(void 0, void 0, void 0, function* () {
         try {
             const { id } = request.params;
+            // GET Availability by ID
             const availability = yield server_1.prisma.availability.findUnique({
                 where: { availabilityID: String(id) },
             });

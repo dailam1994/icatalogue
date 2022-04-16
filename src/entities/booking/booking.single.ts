@@ -14,6 +14,8 @@ export const booking = {
     }>, reply: FastifyReply) => {
         try {
             const { id } = request.params
+
+            // GET Book by ID
             const booking = await prisma.booking.findUnique({
                 where: { bookingID: String(id) },
             })
