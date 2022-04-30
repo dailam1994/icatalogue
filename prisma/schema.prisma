@@ -23,7 +23,7 @@ model user {
 
 model availability {
   availabilityID String   @id @unique @default(uuid())
-  date           DateTime @db.Timestamp(6)
+  date           DateTime @unique @db.Timestamp(6)
   startTime      DateTime @db.Timestamp(6)
   endTime        DateTime @db.Timestamp(6)
 }

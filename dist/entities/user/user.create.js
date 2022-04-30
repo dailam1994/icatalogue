@@ -17,39 +17,40 @@ exports.createUser = {
     schema: {
         body: user_type_1.modifyItem,
         response: {
-            201: user_type_1.Items
+            201: user_type_1.Items,
         },
     },
     handler: (request, reply) => __awaiter(void 0, void 0, void 0, function* () {
         // Checking is a user is auth and is the correct user role
-        // if (request.session.authenticated === true && request.session.user.role === 'ADMIN') {
-        try {
-            const { firstName, lastName, dateOfBirth, email, username, password, roles } = request.body;
-            // Perform password hashing
-            const hashedPassword = yield server_1.fastify.bcrypt.hash(password);
-            // CREATE User Account
-            const addUser = yield server_1.prisma.user.create({
-                data: {
-                    firstName: String(firstName),
-                    lastName: String(lastName),
-                    dateOfBirth: String(new Date(dateOfBirth).toISOString()),
-                    email: String(email),
-                    username: String(username),
-                    password: String(hashedPassword),
-                    roles
+        if (request.session.authenticated === true &&
+            request.session.user.role === "ADMIN") {
+            try {
+                const { firstName, lastName, dateOfBirth, email, username, password, roles, } = request.body;
+                // Perform password hashing
+                const hashedPassword = yield server_1.fastify.bcrypt.hash(password);
+                // CREATE User Account
+                const addUser = yield server_1.prisma.user.create({
+                    data: {
+                        firstName: String(firstName),
+                        lastName: String(lastName),
+                        dateOfBirth: String(new Date(dateOfBirth).toISOString()),
+                        email: String(email),
+                        username: String(username),
+                        password: String(hashedPassword),
+                        roles,
+                    },
+                });
+                if (!addUser) {
+                    reply.status(400).send("Error Message: (400) Status");
                 }
-            });
-            if (!addUser) {
-                reply.status(400).send("Error Message: (400) Status");
+                reply.status(200).send(addUser);
+                console.log("Created new User successfully!");
             }
-            reply.status(200).send(addUser);
-            console.log('Created new User successfully!');
+            catch (error) {
+                reply.status(500).send("Error Message: (500) Status");
+                console.log(error);
+            }
         }
-        catch (error) {
-            reply.status(500).send("Error Message: (500) Status");
-            console.log(error);
-        }
-        // }
-        reply.status(401).send('Error Message: (401) Status');
-    })
+        reply.status(401).send("Error Message: (401) Status");
+    }),
 };

@@ -9,35 +9,25 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.user = void 0;
-const server_1 = require("../../server");
+exports.authClient = void 0;
 const user_type_1 = require("./user.type");
-// GET A User
-exports.user = {
+// GET Auth Client
+exports.authClient = {
     schema: {
         response: {
-            200: user_type_1.Items
+            200: user_type_1.authStatus
         }
     },
     handler: (request, reply) => __awaiter(void 0, void 0, void 0, function* () {
-        // Checking is a user is auth and is the correct user role
-        if (request.session.authenticated === true) {
-            try {
-                const { id } = request.params;
-                // GET User by ID
-                const user = yield server_1.prisma.user.findUnique({
-                    where: { userID: String(id) },
-                });
-                if (!user) {
-                    reply.status(400).send("Error Message: (400) Status");
-                }
-                reply.status(200).send(user);
-                console.log('Read A User successfully!');
-            }
-            catch (error) {
-                reply.status(500).send("Error Message: (500) Status");
-                console.log(error);
-            }
+        try {
+            // Creating data for handling session
+            const session = request.session;
+            reply.status(200).send(session);
+            // console.log('Read Auth User successfully!')
+        }
+        catch (error) {
+            reply.status(500).send("Error Message: (500) Status");
+            console.log(error);
         }
         reply.status(401).send('Error Message: (401) Status');
     })

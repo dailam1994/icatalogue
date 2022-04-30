@@ -7,6 +7,7 @@ import { deleteUser } from './user.delete'
 import { loginUser } from './user.login'
 import { logoutUser } from './user.logout'
 import { authUser } from './user.auth'
+import { authClient } from './user.client'
 
 // Routes for Users
 export const userRouter = async (fastify: FastifyInstance) => {
@@ -19,4 +20,5 @@ export const userRouter = async (fastify: FastifyInstance) => {
     fastify.post('/api/user/login', loginUser)
     fastify.post('/api/user/logout', logoutUser)
     fastify.get('/api/user/auth', authUser)
+    fastify.get('/api/user/client', authClient)
 }

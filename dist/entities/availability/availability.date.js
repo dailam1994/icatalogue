@@ -9,36 +9,32 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.user = void 0;
+exports.availabilityDate = void 0;
 const server_1 = require("../../server");
-const user_type_1 = require("./user.type");
-// GET A User
-exports.user = {
+const availability_type_1 = require("./availability.type");
+// GET an Availability
+exports.availabilityDate = {
     schema: {
         response: {
-            200: user_type_1.Items
-        }
+            200: availability_type_1.Items,
+        },
     },
     handler: (request, reply) => __awaiter(void 0, void 0, void 0, function* () {
-        // Checking is a user is auth and is the correct user role
-        if (request.session.authenticated === true) {
-            try {
-                const { id } = request.params;
-                // GET User by ID
-                const user = yield server_1.prisma.user.findUnique({
-                    where: { userID: String(id) },
-                });
-                if (!user) {
-                    reply.status(400).send("Error Message: (400) Status");
-                }
-                reply.status(200).send(user);
-                console.log('Read A User successfully!');
+        try {
+            const { date } = request.params;
+            // GET Availability by ID
+            const availability = yield server_1.prisma.availability.findUnique({
+                where: { date: String(date) },
+            });
+            if (!availability) {
+                reply.status(400).send("Error Message: (400) Status");
             }
-            catch (error) {
-                reply.status(500).send("Error Message: (500) Status");
-                console.log(error);
-            }
+            reply.status(200).send(availability);
+            console.log("Read an Availability successfully!");
         }
-        reply.status(401).send('Error Message: (401) Status');
-    })
+        catch (error) {
+            reply.status(500).send("Error Message: (500) Status");
+            console.log(error);
+        }
+    }),
 };

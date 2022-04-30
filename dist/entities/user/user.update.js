@@ -17,44 +17,66 @@ exports.updateUser = {
     schema: {
         body: user_type_1.modifyItem,
         response: {
-            200: user_type_1.Items
+            200: user_type_1.Items,
         },
     },
     handler: (request, reply) => __awaiter(void 0, void 0, void 0, function* () {
         // Checking is a user is auth and is the correct user role
-        if (request.session.authenticated === true && request.session.user.role === 'ADMIN') {
+        if (request.session.authenticated === true) {
             try {
                 const { id } = request.params;
                 const { firstName, lastName, dateOfBirth, email, username, password, roles } = request.body;
-                // Hashing updated user password
-                let hashedPassword = server_1.fastify.bcrypt.hash(password);
+                let hashedPassword;
+                let updateUser;
+                // If statement to handle if the password requires hashing
                 if (!password.startsWith("$2b$06$")) {
-                    hashedPassword = server_1.fastify.bcrypt.hash(password);
-                }
-                // UPDATE User by ID
-                const updateUser = yield server_1.prisma.user.update({
-                    where: { userID: String(id) },
-                    data: {
-                        firstName: String(firstName),
-                        lastName: String(lastName),
-                        dateOfBirth: String(new Date(dateOfBirth).toISOString()),
-                        email: String(email),
-                        username: String(username),
-                        password: String(hashedPassword),
-                        roles
+                    // Hashing updated user password
+                    hashedPassword = yield server_1.fastify.bcrypt.hash(password);
+                    // UPDATE User by ID
+                    updateUser = yield server_1.prisma.user.update({
+                        where: { userID: String(id) },
+                        data: {
+                            firstName: String(firstName),
+                            lastName: String(lastName),
+                            dateOfBirth: String(new Date(dateOfBirth).toISOString()),
+                            email: String(email),
+                            username: String(username),
+                            password: String(hashedPassword),
+                            roles,
+                        },
+                    });
+                    if (!updateUser) {
+                        reply.status(400).send("Error Message: (400) Status");
                     }
-                });
-                if (!updateUser) {
-                    reply.status(400).send("Error Message: (400) Status");
+                    reply.status(200).send(updateUser);
+                    console.log("Updated A User successfully!");
                 }
-                reply.status(200).send(updateUser);
-                console.log('Updated A User successfully!');
+                else if (password.startsWith("$2b$06$")) {
+                    // UPDATE User by ID
+                    updateUser = yield server_1.prisma.user.update({
+                        where: { userID: String(id) },
+                        data: {
+                            firstName: String(firstName),
+                            lastName: String(lastName),
+                            dateOfBirth: String(new Date(dateOfBirth).toISOString()),
+                            email: String(email),
+                            username: String(username),
+                            password: String(password),
+                            roles,
+                        },
+                    });
+                    if (!updateUser) {
+                        reply.status(400).send("Error Message: (400) Status");
+                    }
+                    reply.status(200).send(updateUser);
+                    console.log("Updated A User successfully!");
+                }
             }
             catch (error) {
                 reply.status(500).send("Error Message: (500) Status");
                 console.log(error);
             }
         }
-        reply.status(401).send('Error Message: (401) Status');
-    })
+        reply.status(401).send("Error Message: (401) Status");
+    }),
 };

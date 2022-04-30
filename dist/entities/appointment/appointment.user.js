@@ -9,46 +9,52 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.allAvailability = void 0;
+exports.appointmentUserId = void 0;
 const server_1 = require("../../server");
-const availability_type_1 = require("./availability.type");
-// GET ALL Availabilities
-exports.allAvailability = {
+const appointment_type_1 = require("./appointment.type");
+// GET an Appointment by User ID
+exports.appointmentUserId = {
     schema: {
         response: {
             200: {
                 type: "array",
-                items: availability_type_1.Items,
+                items: appointment_type_1.Items,
             },
         },
     },
     handler: (request, reply) => __awaiter(void 0, void 0, void 0, function* () {
         try {
-            let session = request.session;
-            if (session.authenticated === true && session.user.role === "ADMIN") {
-                // GET ALL Availabilities for ADMIN
-                const availabilities = yield server_1.prisma.availability.findMany({});
-                if (!availabilities) {
-                    reply.status(400).send("Error Message: (400) Status");
-                }
-                reply.status(200).send(availabilities);
-                console.log("Read ALL Availabilities successfully!");
-            }
-            else if (session.authenticated === true && session.user.role === "CLIENT") {
-                // GET ALL Availabilities for CLIENT
-                const availabilities = yield server_1.prisma.availability.findMany({
-                    where: {
+            const { id } = request.params;
+            const appointment = yield server_1.prisma.bookingList.findMany({
+                where: {
+                    userUserID: id,
+                    booking: {
                         date: {
                             gte: new Date(new Date().setDate(new Date().getDate() - 1)),
                         },
                     },
-                });
-                if (!availabilities) {
-                    reply.status(400).send("Error Message: (400) Status");
-                }
-                reply.status(200).send(availabilities);
-                console.log("Read ALL Availabilities successfully!");
+                },
+                orderBy: [
+                    {
+                        booking: {
+                            date: "asc",
+                        },
+                    },
+                    {
+                        booking: {
+                            startTime: "asc",
+                        },
+                    },
+                ],
+                include: {
+                    booking: true,
+                },
+            });
+            if (!appointment) {
+                reply.status(400).send("Error Message: (400) Status");
             }
+            reply.status(200).send(appointment);
+            console.log("Read an Appointment successfully!");
         }
         catch (error) {
             reply.status(500).send("Error Message: (500) Status");

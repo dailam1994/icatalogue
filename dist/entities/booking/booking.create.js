@@ -17,13 +17,13 @@ exports.createBooking = {
     schema: {
         body: booking_type_1.modifyItem,
         response: {
-            201: booking_type_1.Items
+            201: booking_type_1.Items,
         },
     },
     handler: (request, reply) => __awaiter(void 0, void 0, void 0, function* () {
         try {
             const { date, startTime, endTime, firstService, secondService, thirdService, fourthService, fifthService } = request.body;
-            // CREATE Book
+            //  CREATE Book
             const addBooking = yield server_1.prisma.booking.create({
                 data: {
                     date: String(new Date(date).toISOString()),
@@ -34,31 +34,32 @@ exports.createBooking = {
                     thirdService: String(thirdService),
                     fourthService: String(fourthService),
                     fifthService: String(fifthService),
-                }
+                },
             });
-            // GET ALL Books by Date/Time      
+            // GET ALL Books by Date/Time
             const id = yield server_1.prisma.booking.findMany({
                 where: {
                     date: String(new Date(date).toISOString()),
                     startTime: String(new Date(`${date} ${startTime}`).toISOString()),
                     endTime: String(new Date(`${date} ${endTime}`).toISOString()),
-                }
+                },
             });
             // CREATE Booking List
             yield server_1.prisma.bookingList.create({
                 data: {
-                    bookingBookingID: String(id[0].bookingID)
-                }
+                    bookingBookingID: String(id[0].bookingID),
+                    userUserID: request.session.user.userId,
+                },
             });
             if (!addBooking) {
                 reply.status(400).send("Error Message: (400) Status");
             }
             reply.status(200).send(addBooking);
-            console.log('Created new Booking successfully!');
+            console.log("Created new Booking successfully!");
         }
         catch (error) {
             reply.status(500).send("Error Message: (500) Status");
             console.log(error);
         }
-    })
+    }),
 };

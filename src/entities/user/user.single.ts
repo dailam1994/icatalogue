@@ -13,7 +13,7 @@ export const user = {
         Params: { id: string }
     }>, reply: FastifyReply) => {
         // Checking is a user is auth and is the correct user role
-        if (request.session.authenticated === true && request.session.user.role === 'ADMIN') {
+        if (request.session.authenticated === true) {
             try {
                 const { id } = request.params
 

@@ -18,6 +18,7 @@ const user_delete_1 = require("./user.delete");
 const user_login_1 = require("./user.login");
 const user_logout_1 = require("./user.logout");
 const user_auth_1 = require("./user.auth");
+const user_client_1 = require("./user.client");
 // Routes for Users
 const userRouter = (fastify) => __awaiter(void 0, void 0, void 0, function* () {
     // RESTapi endpoints
@@ -29,5 +30,6 @@ const userRouter = (fastify) => __awaiter(void 0, void 0, void 0, function* () {
     fastify.post('/api/user/login', user_login_1.loginUser);
     fastify.post('/api/user/logout', user_logout_1.logoutUser);
     fastify.get('/api/user/auth', user_auth_1.authUser);
+    fastify.get('/api/user/client', user_client_1.authClient);
 });
 exports.userRouter = userRouter;
