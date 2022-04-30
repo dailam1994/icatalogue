@@ -2,7 +2,7 @@
   "name": "proj2",
   "version": "1.0.0",
   "description": "- Backend Web Service for AmourAila Project",
-  "main": "index.ts",
+  "main": "index.js",
   "scripts": {
     "build": "tsc --build",
     "postinstall": "tsc",
