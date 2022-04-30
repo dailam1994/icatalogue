@@ -4,6 +4,8 @@
   "description": "- Backend Web Service for AmourAila Project",
   "main": "index.ts",
   "scripts": {
+    "build": "tsc --build",
+    "postinall": "tsc",
     "dev": "PORT=3333 nodemon src/index.ts",
     "start": "node dist/index.js",
     "test": "jest"
