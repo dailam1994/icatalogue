@@ -27,7 +27,7 @@ exports.fastify = (0, fastify_1.default)();
 exports.prisma = new client_1.PrismaClient();
 /* Register Plugins */
 exports.fastify.register(require("fastify-cors"), {
-    origin: ["https://client-lashes19940827.herokuapp.com"],
+    origin: "https://client-lashes19940827.herokuapp.com",
     methods: ["GET", "POST", "PUT", "DELETE"],
     credentials: true,
 });
@@ -37,12 +37,12 @@ exports.fastify.register(fastify_cookie_1.default);
 exports.fastify.register(fastify_session_1.default, {
     cookieName: "sessionId",
     secret: "27b12d17291a1805fd141c9a38d6e1051b0f",
-    saveUninitialized: false,
+    saveUninitialized: true,
     cookie: {
         path: "/",
         secure: true,
         httpOnly: false,
-        // maxAge: 30 * 60 * 1000, // 30-minute sessions
+        maxAge: 30 * 60 * 1000,
         sameSite: "none",
     },
 });
