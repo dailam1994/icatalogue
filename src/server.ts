@@ -30,7 +30,7 @@ fastify.register(fastifySession, {
       path: "/",
       secure: true,
       httpOnly: false,
-      // maxAge: 30 * 60 * 1000, // 30-minute sessions
+      maxAge: 30 * 60 * 1000, // 30-minute sessions
       sameSite: "none",
    },
 })
