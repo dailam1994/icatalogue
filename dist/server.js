@@ -27,7 +27,7 @@ exports.fastify = (0, fastify_1.default)();
 exports.prisma = new client_1.PrismaClient();
 /* Register Plugins */
 exports.fastify.register(require("fastify-cors"), {
-    origin: "https://technolashes.com",
+    origin: "https://ux19940827.com",
     methods: ["GET", "POST", "PUT", "DELETE"],
     credentials: true,
 });
@@ -43,7 +43,7 @@ exports.fastify.register(fastify_session_1.default, {
         secure: true,
         httpOnly: false,
         maxAge: 30 * 60 * 1000,
-        sameSite: "lax",
+        sameSite: "none",
     },
 });
 // Rate Limits
