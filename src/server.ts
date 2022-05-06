@@ -14,7 +14,7 @@ export const prisma = new PrismaClient()
 
 /* Register Plugins */
 fastify.register(require("fastify-cors"), {
-   origin: "https://ux19940827.herokuapp.com",
+   origin: "https://technolashes.com",
    methods: ["GET", "POST", "PUT", "DELETE"],
    credentials: true,
 })
@@ -31,7 +31,7 @@ fastify.register(fastifySession, {
       secure: true,
       httpOnly: false,
       maxAge: 30 * 60 * 1000, // 30-minute sessions
-      sameSite: "none",
+      sameSite: "lax",
    },
 })
 
