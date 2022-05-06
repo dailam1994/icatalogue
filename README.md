@@ -87,4 +87,4 @@ npm run test
    -  READ, UPDATE and DELETE
       -  Today and Upcoming Client Scheduled Dates
    -  READ and DELETE
-      -  Past Client Bookings
+      -  Past Client Bookings-
