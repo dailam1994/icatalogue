@@ -1,6 +1,7 @@
 import { FastifyRequest, FastifyReply } from "fastify"
 import { prisma } from "../../server"
 import { modifyItem, Items } from "./booking.type"
+import moment from "moment-timezone"
 
 // POST A Booking
 export const createBooking = {
@@ -33,8 +34,8 @@ export const createBooking = {
          const addBooking = await prisma.booking.create({
             data: {
                date: String(new Date(date).toISOString()),
-               startTime: String(new Date(`${date} ${startTime}`).toISOString()),
-               endTime: String(new Date(`${date} ${endTime}`).toISOString()),
+               startTime: String(moment(`${date} ${startTime}`).subtract(10, "hours").toDate().toISOString()),
+               endTime: String(moment(`${date} ${endTime}`).subtract(10, "hours").toDate().toISOString()),
                firstService: String(firstService),
                secondService: String(secondService),
                thirdService: String(thirdService),
@@ -47,8 +48,8 @@ export const createBooking = {
          const id = await prisma.booking.findMany({
             where: {
                date: String(new Date(date).toISOString()),
-               startTime: String(new Date(`${date} ${startTime}`).toISOString()),
-               endTime: String(new Date(`${date} ${endTime}`).toISOString()),
+               startTime: String(moment(`${date} ${startTime}`).subtract(10, "hours").toDate().toISOString()),
+               endTime: String(moment(`${date} ${endTime}`).subtract(10, "hours").toDate().toISOString()),
             },
          })
 

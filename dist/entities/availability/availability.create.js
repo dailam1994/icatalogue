@@ -8,10 +8,14 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.createAvailability = void 0;
 const server_1 = require("../../server");
 const availability_type_1 = require("./availability.type");
+const moment_timezone_1 = __importDefault(require("moment-timezone"));
 // POST an Availability
 exports.createAvailability = {
     schema: {
@@ -29,8 +33,8 @@ exports.createAvailability = {
                 const addAvailability = yield server_1.prisma.availability.create({
                     data: {
                         date: String(new Date(date).toISOString()),
-                        startTime: String(new Date(`${date} ${startTime}`).toISOString()),
-                        endTime: String(new Date(`${date} ${endTime}`).toISOString()),
+                        startTime: String((0, moment_timezone_1.default)(`${date} ${startTime}`).subtract(10, "hours").toDate().toISOString()),
+                        endTime: String((0, moment_timezone_1.default)(`${date} ${endTime}`).subtract(10, "hours").toDate().toISOString()),
                     },
                 });
                 if (!addAvailability) {

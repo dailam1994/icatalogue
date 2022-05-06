@@ -1,6 +1,7 @@
 import { FastifyRequest, FastifyReply } from "fastify"
 import { prisma } from "../../server"
 import { modifyItem, Items } from "./availability.type"
+import moment from "moment-timezone"
 
 // POST an Availability
 export const createAvailability = {
@@ -29,8 +30,8 @@ export const createAvailability = {
             const addAvailability = await prisma.availability.create({
                data: {
                   date: String(new Date(date).toISOString()),
-                  startTime: String(new Date(`${date} ${startTime}`).toISOString()),
-                  endTime: String(new Date(`${date} ${endTime}`).toISOString()),
+                  startTime: String(moment(`${date} ${startTime}`).subtract(10, "hours").toDate().toISOString()),
+                  endTime: String(moment(`${date} ${endTime}`).subtract(10, "hours").toDate().toISOString()),
                },
             })
 

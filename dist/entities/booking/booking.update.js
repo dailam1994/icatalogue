@@ -8,16 +8,20 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.updateBooking = void 0;
 const server_1 = require("../../server");
 const booking_type_1 = require("./booking.type");
+const moment_timezone_1 = __importDefault(require("moment-timezone"));
 // PUT A Booking
 exports.updateBooking = {
     schema: {
         body: booking_type_1.modifyItem,
         response: {
-            200: booking_type_1.Items
+            200: booking_type_1.Items,
         },
     },
     handler: (request, reply) => __awaiter(void 0, void 0, void 0, function* () {
@@ -29,24 +33,24 @@ exports.updateBooking = {
                 where: { bookingID: String(id) },
                 data: {
                     date: String(new Date(date).toISOString()),
-                    startTime: String(new Date(`${date} ${startTime}`).toISOString()),
-                    endTime: String(new Date(`${date} ${endTime}`).toISOString()),
+                    startTime: String((0, moment_timezone_1.default)(`${date} ${startTime}`).subtract(10, "hours").toDate().toISOString()),
+                    endTime: String((0, moment_timezone_1.default)(`${date} ${endTime}`).subtract(10, "hours").toDate().toISOString()),
                     firstService: String(firstService),
                     secondService: String(secondService),
                     thirdService: String(thirdService),
                     fourthService: String(fourthService),
                     fifthService: String(fifthService),
-                }
+                },
             });
             if (!updateBooking) {
                 reply.status(400).send("Error Message: (400) Status");
             }
             reply.status(200).send(updateBooking);
-            console.log('Updated a Booking successfully!');
+            console.log("Updated a Booking successfully!");
         }
         catch (error) {
             reply.status(500).send("Error Message: (500) Status");
             console.log(error);
         }
-    })
+    }),
 };
