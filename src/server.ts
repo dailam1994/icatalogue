@@ -5,9 +5,7 @@ import fastifySession from "fastify-session"
 import fastifyCookie from "fastify-cookie"
 import rateLimit from "fastify-rate-limit"
 import { userRouter } from "./entities/user/user.route"
-import { availabilityRouter } from "./entities/availability/availability.route"
-import { bookingRouter } from "./entities/booking/booking.route"
-import { appointmentRouter } from "./entities/appointment/apppointment.route"
+import { recordRouter } from "./entities/record/record.route"
 
 export const fastify = Fastify()
 export const prisma = new PrismaClient()
@@ -50,9 +48,7 @@ fastify.register(rateLimit, {
 
 /* Register Routes */
 fastify.register(userRouter)
-fastify.register(availabilityRouter)
-fastify.register(bookingRouter)
-fastify.register(appointmentRouter)
+fastify.register(recordRouter)
 
 /* Middleware for preHandler of application */
 fastify.addHook("preHandler", async (request, reply, next) => {

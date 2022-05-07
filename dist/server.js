@@ -20,9 +20,7 @@ const fastify_session_1 = __importDefault(require("fastify-session"));
 const fastify_cookie_1 = __importDefault(require("fastify-cookie"));
 const fastify_rate_limit_1 = __importDefault(require("fastify-rate-limit"));
 const user_route_1 = require("./entities/user/user.route");
-const availability_route_1 = require("./entities/availability/availability.route");
-const booking_route_1 = require("./entities/booking/booking.route");
-const apppointment_route_1 = require("./entities/appointment/apppointment.route");
+const record_route_1 = require("./entities/record/record.route");
 exports.fastify = (0, fastify_1.default)();
 exports.prisma = new client_1.PrismaClient();
 /* Register Plugins */
@@ -49,7 +47,7 @@ exports.fastify.register(fastify_session_1.default, {
 // Rate Limits
 exports.fastify.register(fastify_rate_limit_1.default, {
     max: 1,
-    timeWindow: 3000,
+    timeWindow: "1 second",
     // whitelist: ['127.0.0.1']
 });
 exports.fastify.register(fastify_rate_limit_1.default, {
@@ -59,9 +57,7 @@ exports.fastify.register(fastify_rate_limit_1.default, {
 });
 /* Register Routes */
 exports.fastify.register(user_route_1.userRouter);
-exports.fastify.register(availability_route_1.availabilityRouter);
-exports.fastify.register(booking_route_1.bookingRouter);
-exports.fastify.register(apppointment_route_1.appointmentRouter);
+exports.fastify.register(record_route_1.recordRouter);
 /* Middleware for preHandler of application */
 exports.fastify.addHook("preHandler", (request, reply, next) => __awaiter(void 0, void 0, void 0, function* () {
     let userLoggedIn = request.session.user !== undefined;

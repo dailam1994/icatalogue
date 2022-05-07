@@ -88,3 +88,7 @@ npm run test
       -  Today and Upcoming Client Scheduled Dates
    -  READ and DELETE
       -  Past Client Bookings-
+
+(2022-05-07) [21:20]
+
+-  Admin Record (CRUD + Schema)

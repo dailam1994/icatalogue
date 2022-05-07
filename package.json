@@ -23,7 +23,6 @@
     "fastify-formbody": "^5.2.0",
     "fastify-rate-limit": "^5.8.0",
     "fastify-session": "^5.2.1",
-    "moment-timezone": "^0.5.34",
     "prisma": "^3.11.0",
     "ts-node": "^10.7.0"
   },
