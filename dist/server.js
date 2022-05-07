@@ -49,7 +49,7 @@ exports.fastify.register(fastify_session_1.default, {
 // Rate Limits
 exports.fastify.register(fastify_rate_limit_1.default, {
     max: 1,
-    timeWindow: "1 second",
+    timeWindow: 3000,
     // whitelist: ['127.0.0.1']
 });
 exports.fastify.register(fastify_rate_limit_1.default, {

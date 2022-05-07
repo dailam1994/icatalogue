@@ -27,6 +27,10 @@ exports.createBooking = {
     handler: (request, reply) => __awaiter(void 0, void 0, void 0, function* () {
         try {
             const { date, startTime, endTime, firstService, secondService, thirdService, fourthService, fifthService } = request.body;
+            // console.log(new Date(`${date} ${startTime}`).toISOString())
+            // console.log(moment(`${date} ${startTime}`).subtract(10, "hours").toDate().toISOString())
+            // console.log(new Date(`${date} ${endTime}`).toISOString())
+            // console.log(moment(`${date} ${endTime}`).subtract(10, "hours").toDate().toISOString())
             //  CREATE Book
             const addBooking = yield server_1.prisma.booking.create({
                 data: {

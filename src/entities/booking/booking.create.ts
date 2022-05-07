@@ -29,6 +29,10 @@ export const createBooking = {
       try {
          const { date, startTime, endTime, firstService, secondService, thirdService, fourthService, fifthService } =
             request.body
+         // console.log(new Date(`${date} ${startTime}`).toISOString())
+         // console.log(moment(`${date} ${startTime}`).subtract(10, "hours").toDate().toISOString())
+         // console.log(new Date(`${date} ${endTime}`).toISOString())
+         // console.log(moment(`${date} ${endTime}`).subtract(10, "hours").toDate().toISOString())
 
          //  CREATE Book
          const addBooking = await prisma.booking.create({
