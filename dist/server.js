@@ -21,6 +21,8 @@ const fastify_cookie_1 = __importDefault(require("fastify-cookie"));
 const fastify_rate_limit_1 = __importDefault(require("fastify-rate-limit"));
 const user_route_1 = require("./entities/user/user.route");
 const record_route_1 = require("./entities/record/record.route");
+const logging_route_1 = require("./entities/logging/logging.route");
+const blockip_route_1 = require("./entities/blockip/blockip.route");
 exports.fastify = (0, fastify_1.default)();
 exports.prisma = new client_1.PrismaClient();
 /* Register Plugins */
@@ -58,49 +60,59 @@ exports.fastify.register(fastify_rate_limit_1.default, {
 /* Register Routes */
 exports.fastify.register(user_route_1.userRouter);
 exports.fastify.register(record_route_1.recordRouter);
+exports.fastify.register(logging_route_1.loggingRouter);
+exports.fastify.register(blockip_route_1.blockipRouter);
 /* Middleware for preHandler of application */
-exports.fastify.addHook("preHandler", (request, reply, next) => __awaiter(void 0, void 0, void 0, function* () {
+exports.fastify.addHook("preHandler", (request, reply) => __awaiter(void 0, void 0, void 0, function* () {
     let userLoggedIn = request.session.user !== undefined;
-    // let userLoggedIn = true
     let allowedURLs = ["/api/user/login", "/api/user/auth"];
-    // Checking if user has logged in
-    if (userLoggedIn) {
-        // GET User Logging Data by Username
-        const loggingData = yield exports.prisma.logging.findMany({
-            where: {
-                username: request.session.user.username,
-            },
-        });
-        // Looping through the logging data
-        for (let i of loggingData) {
-            // Auto DELETE logging data that becomes stale after 1 day (recommended 10-30days)
-            if (new Date(new Date(i.timestamp).setDate(new Date(i.timestamp).getDate() + 1)) < new Date()) {
-                yield exports.prisma.logging.deleteMany({
-                    where: {
-                        username: i.username,
-                    },
-                });
-            }
-        }
-        // CREATE logging feature via every request w.r.t to a logged in user
-        yield exports.prisma.logging.create({
-            data: {
-                ip: String(request.ip),
-                session: String(JSON.stringify(request.session)),
-                username: String(request.session.user.username),
-                usertype: String(request.session.user.role),
-                timestamp: String(new Date().toISOString()),
-                action: String(request.method),
-            },
-        });
+    let blockList = [];
+    // Obtaining Block IP Data
+    const blockData = yield exports.prisma.blockip.findMany();
+    // Looping through each object and adding the ip to an empty Array
+    for (let i of blockData) {
+        blockList.push(i.ip);
+    }
+    if (blockList.includes(request.ip)) {
+        console.log("Your IP Address has been blocked from using the service");
+        reply.redirect("/api/user/login");
     }
     else {
-        if (allowedURLs.includes(request.url)) {
-            next();
+        // Checking if user has logged in
+        if (userLoggedIn) {
+            // GET User Logging Data by Username
+            const loggingData = yield exports.prisma.logging.findMany({
+                where: {
+                    username: request.session.user.username,
+                },
+            });
+            // Looping through the logging data
+            for (let i of loggingData) {
+                // Auto DELETE logging data that becomes stale after 1 day (recommended 10-30days)
+                if (new Date(new Date(i.timestamp).setDate(new Date(i.timestamp).getDate() + 1)) < new Date()) {
+                    yield exports.prisma.logging.deleteMany({
+                        where: {
+                            username: i.username,
+                        },
+                    });
+                }
+            }
+            // CREATE logging feature via every request w.r.t to a logged in user
+            yield exports.prisma.logging.create({
+                data: {
+                    ip: String(request.ip),
+                    session: String(JSON.stringify(request.session)),
+                    username: String(request.session.user.username),
+                    usertype: String(request.session.user.role),
+                    timestamp: String(new Date().toISOString()),
+                    action: String(request.method),
+                },
+            });
         }
         else {
-            reply.redirect("/api/user/login");
-            next();
+            if (!allowedURLs.includes(request.url)) {
+                reply.redirect("/api/user/login");
+            }
         }
     }
 }));

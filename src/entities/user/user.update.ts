@@ -1,5 +1,6 @@
 import { FastifyRequest, FastifyReply } from "fastify"
 import { Role } from "@prisma/client"
+import validator from "validator"
 import { fastify, prisma } from "../../server"
 import { Items, modifyItem } from "./user.type"
 
@@ -46,11 +47,11 @@ export const updateUser = {
                updateUser = await prisma.user.update({
                   where: { userID: String(id) },
                   data: {
-                     firstName: String(firstName),
-                     lastName: String(lastName),
-                     dateOfBirth: String(new Date(dateOfBirth).toISOString()),
-                     email: String(email),
-                     username: String(username),
+                     firstName: validator.escape(String(firstName)),
+                     lastName: validator.escape(String(lastName)),
+                     dateOfBirth: validator.escape(String(new Date(dateOfBirth).toISOString())),
+                     email: validator.escape(String(email)),
+                     username: validator.escape(String(username)),
                      password: String(hashedPassword),
                      roles,
                   },
@@ -66,12 +67,12 @@ export const updateUser = {
                updateUser = await prisma.user.update({
                   where: { userID: String(id) },
                   data: {
-                     firstName: String(firstName),
-                     lastName: String(lastName),
-                     dateOfBirth: String(new Date(dateOfBirth).toISOString()),
-                     email: String(email),
-                     username: String(username),
-                     password: String(password),
+                     firstName: validator.escape(String(firstName)),
+                     lastName: validator.escape(String(lastName)),
+                     dateOfBirth: validator.escape(String(new Date(dateOfBirth).toISOString())),
+                     email: validator.escape(String(email)),
+                     username: validator.escape(String(username)),
+                     password: validator.escape(String(password)),
                      roles,
                   },
                })

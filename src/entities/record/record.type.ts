@@ -50,9 +50,9 @@ export const modifyItem = {
    type: "object",
    required: ["date", "start", "end", "firstService", "secondService", "thirdService", "fourthService", "fifthService"],
    properties: {
-      date: { type: "string" },
-      start: { type: "string" },
-      end: { type: "string" },
+      date: { type: "string", pattern: "[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]" },
+      start: { type: "string", pattern: "[0-1]?[0-9]:?[0-5][0-9](A|P)M$" },
+      end: { type: "string", pattern: "[0-1]?[0-9]:?[0-5][0-9](A|P)M$" },
       firstService: { type: "string" || null },
       secondService: { type: "string" || null },
       thirdService: { type: "string" || null },

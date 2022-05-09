@@ -1,14 +1,14 @@
 import { FastifyRequest, FastifyReply } from "fastify"
 import { prisma } from "../../server"
-import { AllItems } from "./record.type"
+import { Items } from "./logging.type"
 
-// GET ALL Records
-export const allRecords = {
+// GET ALL Loggings
+export const allLoggings = {
    schema: {
       response: {
          200: {
             type: "array",
-            items: AllItems,
+            items: Items,
          },
       },
    },
@@ -16,24 +16,18 @@ export const allRecords = {
       // Checking if a user is auth and is the correct user role
       if (request.session.authenticated === true && request.session.user.role === "ADMIN") {
          try {
-            // GET ALL Records
-            const records = await prisma.recordList.findMany({
-               include: {
-                  record: true,
-                  user: {
-                     select: {
-                        firstName: true,
-                        lastName: true,
-                     },
-                  },
+            // GET ALL Loggings
+            const loggings = await prisma.logging.findMany({
+               where: {
+                  usertype: null,
                },
             })
 
-            if (!records) {
+            if (!loggings) {
                reply.status(400).send("Error Message: (400) Status")
             }
-            reply.status(200).send(records)
-            console.log("Read ALL Records successfully!")
+            reply.status(200).send(loggings)
+            console.log("Read ALL Loggings successfully!")
          } catch (error) {
             reply.status(500).send("Error Message: (500) Status")
             console.log(error)

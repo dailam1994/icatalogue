@@ -1,5 +1,6 @@
 import { FastifyRequest, FastifyReply } from "fastify"
 import { prisma } from "../../server"
+import validator from "validator"
 import { Items, modifyItem } from "./record.type"
 
 // PUT A Record
@@ -35,14 +36,14 @@ export const updateRecord = {
          const updateRecord = await prisma.record.update({
             where: { recordID: String(id) },
             data: {
-               date: String(date),
-               start: String(start),
-               end: String(end),
-               firstService: String(firstService),
-               secondService: String(secondService),
-               thirdService: String(thirdService),
-               fourthService: String(fourthService),
-               fifthService: String(fifthService),
+               date: validator.escape(String(date)),
+               start: validator.escape(String(start)),
+               end: validator.escape(String(end)),
+               firstService: validator.escape(String(firstService)),
+               secondService: validator.escape(String(secondService)),
+               thirdService: validator.escape(String(thirdService)),
+               fourthService: validator.escape(String(fourthService)),
+               fifthService: validator.escape(String(fifthService)),
             },
          })
 

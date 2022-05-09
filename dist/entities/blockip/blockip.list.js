@@ -9,40 +9,24 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.allRecords = void 0;
+exports.allBlockip = void 0;
 const server_1 = require("../../server");
-const record_type_1 = require("./record.type");
-// GET ALL Records
-exports.allRecords = {
+// GET ALL Blocked IPs
+exports.allBlockip = {
     schema: {
-        response: {
-            200: {
-                type: "array",
-                items: record_type_1.AllItems,
-            },
-        },
+        response: 200,
     },
     handler: (request, reply) => __awaiter(void 0, void 0, void 0, function* () {
         // Checking if a user is auth and is the correct user role
         if (request.session.authenticated === true && request.session.user.role === "ADMIN") {
             try {
-                // GET ALL Records
-                const records = yield server_1.prisma.recordList.findMany({
-                    include: {
-                        record: true,
-                        user: {
-                            select: {
-                                firstName: true,
-                                lastName: true,
-                            },
-                        },
-                    },
-                });
-                if (!records) {
+                // GET ALL Blocked Ips
+                const blockedips = yield server_1.prisma.blockip.findMany();
+                if (!blockedips) {
                     reply.status(400).send("Error Message: (400) Status");
                 }
-                reply.status(200).send(records);
-                console.log("Read ALL Records successfully!");
+                reply.status(200).send(blockedips);
+                console.log("Read ALL Blocked IPs successfully!");
             }
             catch (error) {
                 reply.status(500).send("Error Message: (500) Status");

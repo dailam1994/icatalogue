@@ -8,8 +8,12 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.updateUser = void 0;
+const validator_1 = __importDefault(require("validator"));
 const server_1 = require("../../server");
 const user_type_1 = require("./user.type");
 // PUT A User
@@ -36,11 +40,11 @@ exports.updateUser = {
                     updateUser = yield server_1.prisma.user.update({
                         where: { userID: String(id) },
                         data: {
-                            firstName: String(firstName),
-                            lastName: String(lastName),
-                            dateOfBirth: String(new Date(dateOfBirth).toISOString()),
-                            email: String(email),
-                            username: String(username),
+                            firstName: validator_1.default.escape(String(firstName)),
+                            lastName: validator_1.default.escape(String(lastName)),
+                            dateOfBirth: validator_1.default.escape(String(new Date(dateOfBirth).toISOString())),
+                            email: validator_1.default.escape(String(email)),
+                            username: validator_1.default.escape(String(username)),
                             password: String(hashedPassword),
                             roles,
                         },
@@ -56,12 +60,12 @@ exports.updateUser = {
                     updateUser = yield server_1.prisma.user.update({
                         where: { userID: String(id) },
                         data: {
-                            firstName: String(firstName),
-                            lastName: String(lastName),
-                            dateOfBirth: String(new Date(dateOfBirth).toISOString()),
-                            email: String(email),
-                            username: String(username),
-                            password: String(password),
+                            firstName: validator_1.default.escape(String(firstName)),
+                            lastName: validator_1.default.escape(String(lastName)),
+                            dateOfBirth: validator_1.default.escape(String(new Date(dateOfBirth).toISOString())),
+                            email: validator_1.default.escape(String(email)),
+                            username: validator_1.default.escape(String(username)),
+                            password: validator_1.default.escape(String(password)),
                             roles,
                         },
                     });

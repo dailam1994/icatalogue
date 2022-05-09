@@ -6,6 +6,8 @@ import fastifyCookie from "fastify-cookie"
 import rateLimit from "fastify-rate-limit"
 import { userRouter } from "./entities/user/user.route"
 import { recordRouter } from "./entities/record/record.route"
+import { loggingRouter } from "./entities/logging/logging.route"
+import { blockipRouter } from "./entities/blockip/blockip.route"
 
 export const fastify = Fastify()
 export const prisma = new PrismaClient()
@@ -49,51 +51,63 @@ fastify.register(rateLimit, {
 /* Register Routes */
 fastify.register(userRouter)
 fastify.register(recordRouter)
+fastify.register(loggingRouter)
+fastify.register(blockipRouter)
 
 /* Middleware for preHandler of application */
-fastify.addHook("preHandler", async (request, reply, next) => {
+fastify.addHook("preHandler", async (request, reply) => {
    let userLoggedIn = request.session.user !== undefined
-   // let userLoggedIn = true
    let allowedURLs = ["/api/user/login", "/api/user/auth"]
+   let blockList = []
 
-   // Checking if user has logged in
-   if (userLoggedIn) {
-      // GET User Logging Data by Username
-      const loggingData = await prisma.logging.findMany({
-         where: {
-            username: request.session.user.username,
-         },
-      })
+   // Obtaining Block IP Data
+   const blockData = await prisma.blockip.findMany()
 
-      // Looping through the logging data
-      for (let i of loggingData) {
-         // Auto DELETE logging data that becomes stale after 1 day (recommended 10-30days)
-         if (new Date(new Date(i.timestamp).setDate(new Date(i.timestamp).getDate() + 1)) < new Date()) {
-            await prisma.logging.deleteMany({
-               where: {
-                  username: i.username,
-               },
-            })
-         }
-      }
+   // Looping through each object and adding the ip to an empty Array
+   for (let i of blockData) {
+      blockList.push(i.ip)
+   }
 
-      // CREATE logging feature via every request w.r.t to a logged in user
-      await prisma.logging.create({
-         data: {
-            ip: String(request.ip),
-            session: String(JSON.stringify(request.session)),
-            username: String(request.session.user.username),
-            usertype: String(request.session.user.role),
-            timestamp: String(new Date().toISOString()),
-            action: String(request.method),
-         },
-      })
+   if (blockList.includes(request.ip)) {
+      console.log("Your IP Address has been blocked from using the service")
+      reply.redirect("/api/user/login")
    } else {
-      if (allowedURLs.includes(request.url)) {
-         next()
+      // Checking if user has logged in
+      if (userLoggedIn) {
+         // GET User Logging Data by Username
+         const loggingData = await prisma.logging.findMany({
+            where: {
+               username: request.session.user.username,
+            },
+         })
+
+         // Looping through the logging data
+         for (let i of loggingData) {
+            // Auto DELETE logging data that becomes stale after 1 day (recommended 10-30days)
+            if (new Date(new Date(i.timestamp).setDate(new Date(i.timestamp).getDate() + 1)) < new Date()) {
+               await prisma.logging.deleteMany({
+                  where: {
+                     username: i.username,
+                  },
+               })
+            }
+         }
+
+         // CREATE logging feature via every request w.r.t to a logged in user
+         await prisma.logging.create({
+            data: {
+               ip: String(request.ip),
+               session: String(JSON.stringify(request.session)),
+               username: String(request.session.user.username),
+               usertype: String(request.session.user.role),
+               timestamp: String(new Date().toISOString()),
+               action: String(request.method),
+            },
+         })
       } else {
-         reply.redirect("/api/user/login")
-         next()
+         if (!allowedURLs.includes(request.url)) {
+            reply.redirect("/api/user/login")
+         }
       }
    }
 })

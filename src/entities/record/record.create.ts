@@ -1,5 +1,6 @@
 import { FastifyRequest, FastifyReply } from "fastify"
 import { prisma } from "../../server"
+import validator from "validator"
 import { modifyItem, Items } from "./record.type"
 
 // POST A Record
@@ -34,23 +35,23 @@ export const createRecord = {
          //  CREATE Record
          const addRecord = await prisma.record.create({
             data: {
-               date: String(date),
-               start: String(start),
-               end: String(end),
-               firstService: String(firstService),
-               secondService: String(secondService),
-               thirdService: String(thirdService),
-               fourthService: String(fourthService),
-               fifthService: String(fifthService),
+               date: validator.escape(String(date)),
+               start: validator.escape(String(start)),
+               end: validator.escape(String(end)),
+               firstService: validator.escape(String(firstService)),
+               secondService: validator.escape(String(secondService)),
+               thirdService: validator.escape(String(thirdService)),
+               fourthService: validator.escape(String(fourthService)),
+               fifthService: validator.escape(String(fifthService)),
             },
          })
 
          // GET ALL Records by Date/Time
          const id = await prisma.record.findMany({
             where: {
-               date: String(date),
-               start: String(start),
-               end: String(end),
+               date: validator.escape(String(date)),
+               start: validator.escape(String(start)),
+               end: validator.escape(String(end)),
             },
          })
 

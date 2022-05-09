@@ -22,6 +22,7 @@ npm run test
 ### Additional Information
 
 -  Supertest + Jest
+-  Session, Cookie, Cors, Formbody, Rate Limit, Validator
 
 ### Version Control
 
@@ -92,3 +93,25 @@ npm run test
 (2022-05-07) [21:20]
 
 -  Admin Record (CRUD + Schema)
+-  Removed Entites
+   -  Availablity
+   -  Schedule
+   -  Booking
+
+(2022-05-09) [13:31]
+
+-  Updated Prisma Schema
+
+   -  Logging
+   -  Blockip
+
+-  Entities
+
+   -  Logging
+      -  List, Route, Type, Delete
+   -  BlockIP
+      -  List, Router, Type, Create, Delete
+
+-  Validation & Santisation
+   -  Formbody Regex
+   -  Validator Escape

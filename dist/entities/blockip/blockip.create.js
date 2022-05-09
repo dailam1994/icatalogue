@@ -8,41 +8,38 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.allRecords = void 0;
+exports.createBlockip = void 0;
 const server_1 = require("../../server");
-const record_type_1 = require("./record.type");
-// GET ALL Records
-exports.allRecords = {
+const validator_1 = __importDefault(require("validator"));
+const blockip_type_1 = require("./blockip.type");
+// POST A Block IP
+exports.createBlockip = {
     schema: {
+        body: blockip_type_1.modifyItem,
         response: {
-            200: {
-                type: "array",
-                items: record_type_1.AllItems,
-            },
+            201: blockip_type_1.Items,
         },
     },
     handler: (request, reply) => __awaiter(void 0, void 0, void 0, function* () {
-        // Checking if a user is auth and is the correct user role
+        // Checking is a user is auth and is the correct user role
         if (request.session.authenticated === true && request.session.user.role === "ADMIN") {
             try {
-                // GET ALL Records
-                const records = yield server_1.prisma.recordList.findMany({
-                    include: {
-                        record: true,
-                        user: {
-                            select: {
-                                firstName: true,
-                                lastName: true,
-                            },
-                        },
+                const { ip } = request.body;
+                // CREATE User Account
+                const addBlockip = yield server_1.prisma.blockip.create({
+                    data: {
+                        ip: validator_1.default.escape(String(ip)),
                     },
                 });
-                if (!records) {
+                if (!addBlockip) {
                     reply.status(400).send("Error Message: (400) Status");
                 }
-                reply.status(200).send(records);
-                console.log("Read ALL Records successfully!");
+                reply.status(200).send(addBlockip);
+                console.log("Blocked and IP successfully!");
             }
             catch (error) {
                 reply.status(500).send("Error Message: (500) Status");

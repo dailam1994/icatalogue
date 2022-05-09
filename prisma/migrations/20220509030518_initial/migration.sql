@@ -54,13 +54,21 @@ CREATE TABLE "changelog" (
 CREATE TABLE "logging" (
     "loggingID" TEXT NOT NULL,
     "ip" VARCHAR(200) NOT NULL,
-    "session" VARCHAR(500) NOT NULL,
-    "username" VARCHAR(200) NOT NULL,
-    "usertype" VARCHAR(200) NOT NULL,
+    "session" VARCHAR(500),
+    "username" VARCHAR(200),
+    "usertype" VARCHAR(200),
     "timestamp" VARCHAR(50) NOT NULL,
     "action" VARCHAR(50) NOT NULL,
 
     CONSTRAINT "logging_pkey" PRIMARY KEY ("loggingID")
+);
+
+-- CreateTable
+CREATE TABLE "blockip" (
+    "blockipID" TEXT NOT NULL,
+    "ip" VARCHAR(50) NOT NULL,
+
+    CONSTRAINT "blockip_pkey" PRIMARY KEY ("blockipID")
 );
 
 -- CreateIndex
@@ -83,6 +91,12 @@ CREATE UNIQUE INDEX "changelog_changelogID_key" ON "changelog"("changelogID");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "logging_loggingID_key" ON "logging"("loggingID");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "blockip_blockipID_key" ON "blockip"("blockipID");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "blockip_ip_key" ON "blockip"("ip");
 
 -- AddForeignKey
 ALTER TABLE "recordList" ADD CONSTRAINT "recordList_userUserID_fkey" FOREIGN KEY ("userUserID") REFERENCES "user"("userID") ON DELETE CASCADE ON UPDATE CASCADE;

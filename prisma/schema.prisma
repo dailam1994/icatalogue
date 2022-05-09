@@ -54,13 +54,18 @@ model changelog {
 }
 
 model logging {
-  loggingID String @id @unique @default(uuid())
-  ip        String @db.VarChar(200)
-  session   String @db.VarChar(500)
-  username  String @db.VarChar(200)
-  usertype  String @db.VarChar(200)
-  timestamp String @db.VarChar(50)
-  action    String @db.VarChar(50)
+  loggingID String  @id @unique @default(uuid())
+  ip        String  @db.VarChar(200)
+  session   String? @db.VarChar(500)
+  username  String? @db.VarChar(200)
+  usertype  String? @db.VarChar(200)
+  timestamp String  @db.VarChar(50)
+  action    String  @db.VarChar(50)
+}
+
+model blockip {
+  blockipID String @id @unique @default(uuid())
+  ip        String @unique @db.VarChar(50)
 }
 
 enum Role {

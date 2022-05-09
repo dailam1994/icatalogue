@@ -8,9 +8,13 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.updateRecord = void 0;
 const server_1 = require("../../server");
+const validator_1 = __importDefault(require("validator"));
 const record_type_1 = require("./record.type");
 // PUT A Record
 exports.updateRecord = {
@@ -28,14 +32,14 @@ exports.updateRecord = {
             const updateRecord = yield server_1.prisma.record.update({
                 where: { recordID: String(id) },
                 data: {
-                    date: String(date),
-                    start: String(start),
-                    end: String(end),
-                    firstService: String(firstService),
-                    secondService: String(secondService),
-                    thirdService: String(thirdService),
-                    fourthService: String(fourthService),
-                    fifthService: String(fifthService),
+                    date: validator_1.default.escape(String(date)),
+                    start: validator_1.default.escape(String(start)),
+                    end: validator_1.default.escape(String(end)),
+                    firstService: validator_1.default.escape(String(firstService)),
+                    secondService: validator_1.default.escape(String(secondService)),
+                    thirdService: validator_1.default.escape(String(thirdService)),
+                    fourthService: validator_1.default.escape(String(fourthService)),
+                    fifthService: validator_1.default.escape(String(fifthService)),
                 },
             });
             if (!updateRecord) {

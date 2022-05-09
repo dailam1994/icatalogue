@@ -9,40 +9,33 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.allRecords = void 0;
+exports.deleteBlockip = void 0;
 const server_1 = require("../../server");
-const record_type_1 = require("./record.type");
-// GET ALL Records
-exports.allRecords = {
+const blockip_type_1 = require("./blockip.type");
+// DELETE A Block IP
+exports.deleteBlockip = {
     schema: {
         response: {
-            200: {
-                type: "array",
-                items: record_type_1.AllItems,
-            },
+            200: blockip_type_1.deleteItem,
         },
     },
     handler: (request, reply) => __awaiter(void 0, void 0, void 0, function* () {
-        // Checking if a user is auth and is the correct user role
+        // Checking is a user is auth and is the correct user role
         if (request.session.authenticated === true && request.session.user.role === "ADMIN") {
             try {
-                // GET ALL Records
-                const records = yield server_1.prisma.recordList.findMany({
-                    include: {
-                        record: true,
-                        user: {
-                            select: {
-                                firstName: true,
-                                lastName: true,
-                            },
-                        },
+                const { ip } = request.body;
+                console.log(ip);
+                // DELETE Blockip by IP
+                const deleteBlockip = yield server_1.prisma.blockip.delete({
+                    where: {
+                        ip: String(ip),
                     },
                 });
-                if (!records) {
+                if (!deleteBlockip) {
                     reply.status(400).send("Error Message: (400) Status");
                 }
-                reply.status(200).send(records);
-                console.log("Read ALL Records successfully!");
+                reply.status(200).send(`IP Address ${ip} Unblocked successfully`);
+                console.log("Unblocked IP successfully!");
             }
             catch (error) {
                 reply.status(500).send("Error Message: (500) Status");

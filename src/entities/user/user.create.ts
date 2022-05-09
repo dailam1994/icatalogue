@@ -1,5 +1,6 @@
 import { FastifyRequest, FastifyReply } from "fastify"
 import { Role } from "@prisma/client"
+import validator from "validator"
 import { fastify, prisma } from "../../server"
 import { modifyItem, Items } from "./user.type"
 
@@ -28,32 +29,21 @@ export const createUser = {
       reply: FastifyReply
    ) => {
       // Checking is a user is auth and is the correct user role
-      if (
-         request.session.authenticated === true &&
-         request.session.user.role === "ADMIN"
-      ) {
+      if (request.session.authenticated === true && request.session.user.role === "ADMIN") {
          try {
-            const {
-               firstName,
-               lastName,
-               dateOfBirth,
-               email,
-               username,
-               password,
-               roles,
-            } = request.body
+            const { firstName, lastName, dateOfBirth, email, username, password, roles } = request.body
 
             // Perform password hashing
-            const hashedPassword = await fastify.bcrypt.hash(password)
+            const hashedPassword = await fastify.bcrypt.hash(validator.escape(password))
 
             // CREATE User Account
             const addUser = await prisma.user.create({
                data: {
-                  firstName: String(firstName),
-                  lastName: String(lastName),
-                  dateOfBirth: String(new Date(dateOfBirth).toISOString()),
-                  email: String(email),
-                  username: String(username),
+                  firstName: validator.escape(String(firstName)),
+                  lastName: validator.escape(String(lastName)),
+                  dateOfBirth: validator.escape(String(new Date(dateOfBirth).toISOString())),
+                  email: validator.escape(String(email)),
+                  username: validator.escape(String(username)),
                   password: String(hashedPassword),
                   roles,
                },
