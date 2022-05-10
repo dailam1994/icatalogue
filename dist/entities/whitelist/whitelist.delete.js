@@ -9,12 +9,15 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.allBlockip = void 0;
+exports.deleteWhitelist = void 0;
 const server_1 = require("../../server");
-// GET ALL Blocked IPs
-exports.allBlockip = {
+const whitelist_type_1 = require("./whitelist.type");
+// DELETE A Whitelist
+exports.deleteWhitelist = {
     schema: {
-        response: 200,
+        response: {
+            200: whitelist_type_1.deleteItem,
+        },
     },
     handler: (request, reply) => __awaiter(void 0, void 0, void 0, function* () {
         /* WARNING DO NOT UNCOMMENT WHITELISTING IN UNLESS IMPLMENTING */
@@ -28,16 +31,21 @@ exports.allBlockip = {
         //      for (let i of whiteListData) {
         //         // If statement to verify if the Users IPs exist in the whiteList Array
         //         if (i.ip.includes(request.ip)) {
-        // Checking if a user is auth and is the correct user role
+        // Checking is a user is auth and is the correct user role
         if (request.session.authenticated === true && request.session.user.role === "ADMIN") {
             try {
-                // GET ALL Blocked Ips
-                const blockedips = yield server_1.prisma.blockip.findMany();
-                if (!blockedips) {
+                const { ip } = request.body;
+                // DELETE Whitelist by IP
+                const deleteWhitelist = yield server_1.prisma.whitelist.delete({
+                    where: {
+                        ip: String(ip),
+                    },
+                });
+                if (!deleteWhitelist) {
                     reply.status(400).send("Error Message: (400) Status");
                 }
-                reply.status(200).send(blockedips);
-                console.log("Read ALL Blocked IPs successfully!");
+                reply.status(200).send(`Whitelist ${ip} deleted successfully`);
+                console.log("Whitelist deleted successfully!");
             }
             catch (error) {
                 reply.status(500).send("Error Message: (500) Status");

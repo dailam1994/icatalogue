@@ -23,6 +23,7 @@ const user_route_1 = require("./entities/user/user.route");
 const record_route_1 = require("./entities/record/record.route");
 const logging_route_1 = require("./entities/logging/logging.route");
 const blockip_route_1 = require("./entities/blockip/blockip.route");
+const whitelist_route_1 = require("./entities/whitelist/whitelist.route");
 exports.fastify = (0, fastify_1.default)();
 exports.prisma = new client_1.PrismaClient();
 /* Register Plugins */
@@ -62,6 +63,7 @@ exports.fastify.register(user_route_1.userRouter);
 exports.fastify.register(record_route_1.recordRouter);
 exports.fastify.register(logging_route_1.loggingRouter);
 exports.fastify.register(blockip_route_1.blockipRouter);
+exports.fastify.register(whitelist_route_1.whitelistRouter);
 /* Middleware for preHandler of application */
 exports.fastify.addHook("preHandler", (request, reply) => __awaiter(void 0, void 0, void 0, function* () {
     let userLoggedIn = request.session.user !== undefined;

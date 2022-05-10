@@ -8,6 +8,7 @@ import { userRouter } from "./entities/user/user.route"
 import { recordRouter } from "./entities/record/record.route"
 import { loggingRouter } from "./entities/logging/logging.route"
 import { blockipRouter } from "./entities/blockip/blockip.route"
+import { whitelistRouter } from "./entities/whitelist/whitelist.route"
 
 export const fastify = Fastify()
 export const prisma = new PrismaClient()
@@ -53,11 +54,13 @@ fastify.register(userRouter)
 fastify.register(recordRouter)
 fastify.register(loggingRouter)
 fastify.register(blockipRouter)
+fastify.register(whitelistRouter)
 
 /* Middleware for preHandler of application */
 fastify.addHook("preHandler", async (request, reply) => {
    let userLoggedIn = request.session.user !== undefined
    let allowedURLs = ["/api/user/login", "/api/user/auth"]
+
    let blockList = []
 
    // Obtaining Block IP Data

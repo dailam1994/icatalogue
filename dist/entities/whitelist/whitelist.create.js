@@ -8,13 +8,21 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.allBlockip = void 0;
+exports.createWhitelist = void 0;
 const server_1 = require("../../server");
-// GET ALL Blocked IPs
-exports.allBlockip = {
+const validator_1 = __importDefault(require("validator"));
+const whitelist_type_1 = require("./whitelist.type");
+// POST A Whitelist
+exports.createWhitelist = {
     schema: {
-        response: 200,
+        body: whitelist_type_1.modifyItem,
+        response: {
+            201: whitelist_type_1.Items,
+        },
     },
     handler: (request, reply) => __awaiter(void 0, void 0, void 0, function* () {
         /* WARNING DO NOT UNCOMMENT WHITELISTING IN UNLESS IMPLMENTING */
@@ -28,16 +36,21 @@ exports.allBlockip = {
         //      for (let i of whiteListData) {
         //         // If statement to verify if the Users IPs exist in the whiteList Array
         //         if (i.ip.includes(request.ip)) {
-        // Checking if a user is auth and is the correct user role
+        // Checking is a user is auth and is the correct user role
         if (request.session.authenticated === true && request.session.user.role === "ADMIN") {
             try {
-                // GET ALL Blocked Ips
-                const blockedips = yield server_1.prisma.blockip.findMany();
-                if (!blockedips) {
+                const { ip } = request.body;
+                // CREATE IP
+                const addWhitelist = yield server_1.prisma.whitelist.create({
+                    data: {
+                        ip: validator_1.default.escape(String(ip)),
+                    },
+                });
+                if (!addWhitelist) {
                     reply.status(400).send("Error Message: (400) Status");
                 }
-                reply.status(200).send(blockedips);
-                console.log("Read ALL Blocked IPs successfully!");
+                reply.status(200).send(addWhitelist);
+                console.log("Whitelist successfully!");
             }
             catch (error) {
                 reply.status(500).send("Error Message: (500) Status");

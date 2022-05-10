@@ -9,10 +9,10 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.allBlockip = void 0;
+exports.allWhitelist = void 0;
 const server_1 = require("../../server");
-// GET ALL Blocked IPs
-exports.allBlockip = {
+// GET ALL Whitelists
+exports.allWhitelist = {
     schema: {
         response: 200,
     },
@@ -32,12 +32,12 @@ exports.allBlockip = {
         if (request.session.authenticated === true && request.session.user.role === "ADMIN") {
             try {
                 // GET ALL Blocked Ips
-                const blockedips = yield server_1.prisma.blockip.findMany();
-                if (!blockedips) {
+                const whitelists = yield server_1.prisma.whitelist.findMany();
+                if (!whitelists) {
                     reply.status(400).send("Error Message: (400) Status");
                 }
-                reply.status(200).send(blockedips);
-                console.log("Read ALL Blocked IPs successfully!");
+                reply.status(200).send(whitelists);
+                console.log("Read ALL Whitelists successfully!");
             }
             catch (error) {
                 reply.status(500).send("Error Message: (500) Status");

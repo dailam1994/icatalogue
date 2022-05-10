@@ -115,3 +115,12 @@ npm run test
 -  Validation & Santisation
    -  Formbody Regex
    -  Validator Escape
+
+(2022-05-10) [17:45]
+
+-  Updated Prisma Schema
+
+   -  Whitelist
+
+-  WhiteList Entity
+   -  List, Route, Type, Create, Delete

@@ -68,6 +68,11 @@ model blockip {
   ip        String @unique @db.VarChar(50)
 }
 
+model whitelist {
+  whitelistID String @id @unique @default(uuid())
+  ip          String @unique @db.VarChar(50)
+}
+
 enum Role {
   ADMIN
   CLIENT

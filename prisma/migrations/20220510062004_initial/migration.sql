@@ -71,6 +71,14 @@ CREATE TABLE "blockip" (
     CONSTRAINT "blockip_pkey" PRIMARY KEY ("blockipID")
 );
 
+-- CreateTable
+CREATE TABLE "whitelist" (
+    "whitelistID" TEXT NOT NULL,
+    "ip" VARCHAR(50) NOT NULL,
+
+    CONSTRAINT "whitelist_pkey" PRIMARY KEY ("whitelistID")
+);
+
 -- CreateIndex
 CREATE UNIQUE INDEX "user_userID_key" ON "user"("userID");
 
@@ -97,6 +105,12 @@ CREATE UNIQUE INDEX "blockip_blockipID_key" ON "blockip"("blockipID");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "blockip_ip_key" ON "blockip"("ip");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "whitelist_whitelistID_key" ON "whitelist"("whitelistID");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "whitelist_ip_key" ON "whitelist"("ip");
 
 -- AddForeignKey
 ALTER TABLE "recordList" ADD CONSTRAINT "recordList_userUserID_fkey" FOREIGN KEY ("userUserID") REFERENCES "user"("userID") ON DELETE CASCADE ON UPDATE CASCADE;

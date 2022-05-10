@@ -1,16 +1,10 @@
 import { FastifyRequest, FastifyReply } from "fastify"
 import { prisma } from "../../server"
-import { Items } from "./user.type"
 
-// GET ALL Users
-export const allUsers = {
+// GET ALL Whitelists
+export const allWhitelist = {
    schema: {
-      response: {
-         200: {
-            type: "array",
-            items: Items,
-         },
-      },
+      response: 200,
    },
    handler: async (request: FastifyRequest, reply: FastifyReply) => {
       /* WARNING DO NOT UNCOMMENT WHITELISTING IN UNLESS IMPLMENTING */
@@ -25,17 +19,17 @@ export const allUsers = {
       //      for (let i of whiteListData) {
       //         // If statement to verify if the Users IPs exist in the whiteList Array
       //         if (i.ip.includes(request.ip)) {
-      // Checking is a user is auth and is the correct user role
+      // Checking if a user is auth and is the correct user role
       if (request.session.authenticated === true && request.session.user.role === "ADMIN") {
          try {
-            // GET ALL Users
-            const users = await prisma.user.findMany()
+            // GET ALL Blocked Ips
+            const whitelists = await prisma.whitelist.findMany()
 
-            if (!users) {
+            if (!whitelists) {
                reply.status(400).send("Error Message: (400) Status")
             }
-            reply.status(200).send(users)
-            console.log("Read ALL Users successfully!")
+            reply.status(200).send(whitelists)
+            console.log("Read ALL Whitelists successfully!")
          } catch (error) {
             reply.status(500).send("Error Message: (500) Status")
             console.log(error)
