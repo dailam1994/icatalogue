@@ -1,4 +1,12 @@
 /* Whitelist Types and Schema Validations */
+export const whitelistItems = {
+   type: "object",
+   properties: {
+      whitelistID: { type: "string" },
+      ip: { type: "string" },
+   },
+}
+
 export const Items = {
    type: "object",
    properties: {

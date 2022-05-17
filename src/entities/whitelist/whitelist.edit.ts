@@ -1,19 +1,20 @@
 import { FastifyRequest, FastifyReply } from "fastify"
-import { prisma } from "../../server"
 import validator from "validator"
-import { modifyItem, Items } from "./whitelist.type"
+import { prisma } from "../../server"
+import { modifyItem, whitelistItems } from "./whitelist.type"
 
-// POST A Whitelist
-export const createWhitelist = {
+// PUT A Whitelist
+export const editWhitelist = {
    schema: {
       body: modifyItem,
       response: {
-         201: Items,
+         200: whitelistItems,
       },
    },
    handler: async (
       request: FastifyRequest<{
          Body: {
+            whitelistID: string
             ip: string
          }
       }>,
@@ -33,22 +34,28 @@ export const createWhitelist = {
       //         if (i.ip.includes(request.ip)) {
 
       // Checking is a user is auth and is the correct user role
-      if (request.session.authenticated === true && request.session.user.role === "ADMIN") {
+      if (request.session.authenticated === true) {
+         console.log("activated")
          try {
-            const { ip } = request.body
+            // const { id } = request.params
+            const { whitelistID, ip } = request.body
+            console.log(request.body)
 
-            // CREATE IP
-            const addWhitelist = await prisma.whitelist.create({
+            let editWhitelist
+
+            // Edit Whitelist by ID
+            editWhitelist = await prisma.whitelist.update({
+               where: { whitelistID: String(whitelistID) },
                data: {
                   ip: validator.escape(String(ip)),
                },
             })
 
-            if (!addWhitelist) {
+            if (!editWhitelist) {
                reply.status(400).send("Error Message: (400) Status")
             }
-            reply.status(200).send(addWhitelist)
-            console.log("Whitelist successfully!")
+            reply.status(200).send(editWhitelist)
+            console.log("Edit Whitelist successfully!")
          } catch (error) {
             reply.status(500).send("Error Message: (500) Status")
             console.log(error)

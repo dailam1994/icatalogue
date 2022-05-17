@@ -23,15 +23,17 @@ fastify.register(require("fastify-cors"), {
 fastify.register(require("fastify-formbody"))
 fastify.register(fastifyBcrypt, { saltOrRounds: 6 })
 fastify.register(fastifyCookie)
+
+// Authentication Restriction
 fastify.register(fastifySession, {
    cookieName: "sessionId",
    secret: "27b12d17291a1805fd141c9a38d6e1051b0f",
    saveUninitialized: true,
    cookie: {
       path: "/",
-      secure: true,
-      httpOnly: false,
-      maxAge: 30 * 60 * 1000, // 30-minute sessions
+      secure: true, // Turning this on makes sure the HTTPS is a requirement
+      httpOnly: false, // Will not send cookie data to HTTP, only HTTPS allowed
+      maxAge: 30 * 60 * 1000, // 30-minute sessions removes session automatically after set time
       sameSite: "lax",
    },
 })
@@ -75,6 +77,7 @@ fastify.addHook("preHandler", async (request, reply) => {
       console.log("Your IP Address has been blocked from using the service")
       reply.redirect("/api/user/login")
    } else {
+      // Authentication Restriction
       // Checking if user has logged in
       if (userLoggedIn) {
          // GET User Logging Data by Username

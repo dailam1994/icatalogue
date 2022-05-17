@@ -15,6 +15,7 @@ export const logoutUser = {
         }
 
         try {
+            // Authentication Restriction to remove the user sessions
             // Exiting User Session
             request.destroySession((error: Error | undefined) => {
                 if (!error) {

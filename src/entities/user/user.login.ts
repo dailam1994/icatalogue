@@ -35,6 +35,7 @@ export const loginUser = {
             let hashedUser: string | undefined = user?.userID
             let hashedRole: string | undefined = user?.roles
 
+            // Authentication restriction for Session when Use Logs In
             // Creating addtional User Session data
             request.session.user = {
                userId: hashedUser,

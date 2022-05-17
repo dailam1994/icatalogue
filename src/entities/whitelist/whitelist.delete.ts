@@ -29,6 +29,7 @@ export const deleteWhitelist = {
       //      for (let i of whiteListData) {
       //         // If statement to verify if the Users IPs exist in the whiteList Array
       //         if (i.ip.includes(request.ip)) {
+
       // Checking is a user is auth and is the correct user role
       if (request.session.authenticated === true && request.session.user.role === "ADMIN") {
          try {

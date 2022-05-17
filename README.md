@@ -9,6 +9,8 @@ npm i
 npm run dev
 npm run test
 
+sql file requires PostgresSQL running
+
 ```
 
 ## Multi-technology
@@ -124,3 +126,8 @@ npm run test
 
 -  WhiteList Entity
    -  List, Route, Type, Create, Delete
+
+(2022-05-17) [11:37]
+
+-  Updated Whitelest (C.R.D.)
+   -  Include Update functionality

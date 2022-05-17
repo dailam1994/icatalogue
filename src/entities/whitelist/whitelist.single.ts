@@ -1,21 +1,17 @@
 import { FastifyRequest, FastifyReply } from "fastify"
 import { prisma } from "../../server"
-import validator from "validator"
-import { modifyItem, Items } from "./whitelist.type"
+import { Items } from "./whitelist.type"
 
-// POST A Whitelist
-export const createWhitelist = {
+// GET A Whitelist
+export const singleWhitelist = {
    schema: {
-      body: modifyItem,
       response: {
-         201: Items,
+         200: Items,
       },
    },
    handler: async (
       request: FastifyRequest<{
-         Body: {
-            ip: string
-         }
+         Params: { id: string }
       }>,
       reply: FastifyReply
    ) => {
@@ -33,22 +29,20 @@ export const createWhitelist = {
       //         if (i.ip.includes(request.ip)) {
 
       // Checking is a user is auth and is the correct user role
-      if (request.session.authenticated === true && request.session.user.role === "ADMIN") {
+      if (request.session.authenticated === true) {
          try {
-            const { ip } = request.body
+            const { id } = request.params
 
-            // CREATE IP
-            const addWhitelist = await prisma.whitelist.create({
-               data: {
-                  ip: validator.escape(String(ip)),
-               },
+            // GET Whitelist by ID
+            const whitelist = await prisma.whitelist.findUnique({
+               where: { whitelistID: String(id) },
             })
 
-            if (!addWhitelist) {
+            if (!whitelist) {
                reply.status(400).send("Error Message: (400) Status")
             }
-            reply.status(200).send(addWhitelist)
-            console.log("Whitelist successfully!")
+            reply.status(200).send(whitelist)
+            console.log("Read Single Whitelist successfully!")
          } catch (error) {
             reply.status(500).send("Error Message: (500) Status")
             console.log(error)
