@@ -1,6 +1,15 @@
-# PROJ2 Web Service - AmourAila
+# PROJ3 Admin Panel Mobile App - AmourAila
 
--  Backend Web Service for AmourAila Project
+-  Backend Application Admin Panel Additions for AmourAila Project
+-  Project provides an backend application and database for the client and
+   their customers. Client and Customers are allowed to login and interact with
+   the system via their session and access particular routes, functionalities
+   via the connected database. This helps admin and their employee to manage
+   information for each customer along with what entities the backend application
+   provides. In addition, numerous numbers of security implementations have been
+   performed to ensure that the application and its processes are secure and accessible
+   to releveant users.
+-  Requires frontend application
 
 ```
 \/ \/ Commands below \/ \/
@@ -131,3 +140,4 @@ sql file requires PostgresSQL running
 
 -  Updated Whitelest (C.R.D.)
    -  Include Update functionality
+   -  GET Whitelist by ID
