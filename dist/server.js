@@ -28,7 +28,7 @@ exports.fastify = (0, fastify_1.default)();
 exports.prisma = new client_1.PrismaClient();
 /* Register Plugins */
 exports.fastify.register(require("fastify-cors"), {
-    origin: "http://localhost:3000",
+    origin: "https://technolashes.com",
     methods: ["GET", "POST", "PUT", "DELETE"],
     credentials: true,
 });
@@ -41,11 +41,11 @@ exports.fastify.register(fastify_session_1.default, {
     secret: "27b12d17291a1805fd141c9a38d6e1051b0f",
     saveUninitialized: true,
     cookie: {
-        // path: "/",
-        secure: false, // Turning this on makes sure the HTTPS is a requirement
-        // httpOnly: false, // Will not send cookie data to HTTP, only HTTPS allowed
-        // maxAge: 30 * 60 * 1000, // 30-minute sessions removes session automatically after set time
-        // sameSite: "lax",
+        path: "/",
+        secure: true,
+        httpOnly: false,
+        maxAge: 30 * 60 * 1000,
+        sameSite: "lax",
     },
 });
 // Rate Limits
