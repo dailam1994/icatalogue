@@ -34,7 +34,7 @@ export const updateUser = {
          try {
             const { id } = request.params
             const { firstName, lastName, dateOfBirth, email, username, password, roles } = request.body
-
+            console.log(request.body)
             let hashedPassword
             let updateUser
 
@@ -72,7 +72,7 @@ export const updateUser = {
                      dateOfBirth: validator.escape(String(new Date(dateOfBirth).toISOString())),
                      email: validator.escape(String(email)),
                      username: validator.escape(String(username)),
-                     password: validator.escape(String(password)),
+                     password: String(password),
                      roles,
                   },
                })

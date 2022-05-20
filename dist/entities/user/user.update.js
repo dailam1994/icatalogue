@@ -30,6 +30,7 @@ exports.updateUser = {
             try {
                 const { id } = request.params;
                 const { firstName, lastName, dateOfBirth, email, username, password, roles } = request.body;
+                console.log(request.body);
                 let hashedPassword;
                 let updateUser;
                 // If statement to handle if the password requires hashing
@@ -65,7 +66,7 @@ exports.updateUser = {
                             dateOfBirth: validator_1.default.escape(String(new Date(dateOfBirth).toISOString())),
                             email: validator_1.default.escape(String(email)),
                             username: validator_1.default.escape(String(username)),
-                            password: validator_1.default.escape(String(password)),
+                            password: String(password),
                             roles,
                         },
                     });
