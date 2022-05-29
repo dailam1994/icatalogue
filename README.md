@@ -14,9 +14,11 @@
 ```
 \/ \/ Commands below \/ \/
 
-npm i
-npm run dev
-npm run test
+npm i - Install all required node package modules
+npm run dev - Run the application in development mode
+npm run test - Run the test scripts
+tsc -w - Watch and compile typescript to javascript
+npm start - Run the application in production mode
 
 sql file requires PostgresSQL running
 
@@ -141,3 +143,7 @@ sql file requires PostgresSQL running
 -  Updated Whitelest (C.R.D.)
    -  Include Update functionality
    -  GET Whitelist by ID
+
+(2022-05-29) [14:23]
+
+-  Updated Rate Limiter

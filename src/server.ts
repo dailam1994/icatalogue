@@ -41,12 +41,12 @@ fastify.register(fastifySession, {
 // Rate Limits
 fastify.register(rateLimit, {
    max: 1,
-   timeWindow: "1 second",
+   timeWindow: "0.5 second",
    // whitelist: ['127.0.0.1']
 })
 
 fastify.register(rateLimit, {
-   max: 1000,
+   max: 500,
    timeWindow: "24 hour",
    // whitelist: ['127.0.0.1']
 })
