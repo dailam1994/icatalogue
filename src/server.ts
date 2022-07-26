@@ -80,9 +80,9 @@ fastify.addHook("preHandler", async (request, reply) => {
       "/api/admin/auth",
       "/api/items",
       "/dist/index.html",
-      "/dist/assets/main.cb39a31f.js", // Update this on frontend rebuild
+      "/dist/assets/main.bd0fa817.js", // Update this on frontend rebuild
       "/dist/assets/index.c4722732.css",
-      "/dist/assets/admin.route.39945e69.js", // Update this on frontend rebuild
+      "/dist/assets/admin.route.a8d45ade.js", // Update this on frontend rebuild
    ]
 
    // Authentication Restriction
