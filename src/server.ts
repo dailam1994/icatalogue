@@ -15,13 +15,6 @@ export const prisma = new PrismaClient()
 export const cloudinary = require("cloudinary").v2
 export const bcrypt = require("bcryptjs")
 
-// cloudinary.config({
-//    cloud_name: "lqd2708",
-//    api_key: "196971527266931",
-//    api_secret: "_frLEAbr5zJjkSK3taqOq-VB6Ds",
-//    secure: true,
-// })
-
 /* Register Plugins */
 fastify.register(require("fastify-cors"), {
    origin: [
@@ -87,9 +80,9 @@ fastify.addHook("preHandler", async (request, reply) => {
       "/api/admin/auth",
       "/api/items",
       "/dist/index.html",
-      "/dist/assets/main.fe73d944.js",
+      "/dist/assets/main.f998962c.js",
       "/dist/assets/index.c4722732.css",
-      "/dist/assets/admin.route.8c95e20b.js",
+      "/dist/assets/admin.route.68ff4e1e.js",
    ]
 
    // Authentication Restriction

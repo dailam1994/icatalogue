@@ -27,6 +27,6 @@ model item {
   description String?   @db.VarChar(500)
   quantity    Int       @db.SmallInt
   price       Float     @db.DoublePrecision
-  url         String?   @unique @db.VarChar(200)
+  url         String?   @unique @db.VarChar(1000)
   date        DateTime? @default(now()) @updatedAt
 }

@@ -27,12 +27,6 @@ const path = require("path");
 exports.prisma = new client_1.PrismaClient();
 exports.cloudinary = require("cloudinary").v2;
 exports.bcrypt = require("bcryptjs");
-exports.cloudinary.config({
-    cloud_name: "lqd2708",
-    api_key: "196971527266931",
-    api_secret: "_frLEAbr5zJjkSK3taqOq-VB6Ds",
-    secure: true,
-});
 /* Register Plugins */
 exports.fastify.register(require("fastify-cors"), {
     origin: [
@@ -90,9 +84,9 @@ exports.fastify.addHook("preHandler", (request, reply) => __awaiter(void 0, void
         "/api/admin/auth",
         "/api/items",
         "/dist/index.html",
-        "/dist/assets/main.fe73d944.js",
+        "/dist/assets/main.f998962c.js",
         "/dist/assets/index.c4722732.css",
-        "/dist/assets/admin.route.8c95e20b.js",
+        "/dist/assets/admin.route.68ff4e1e.js",
     ];
     // Authentication Restriction
     // Checking if user has logged in
