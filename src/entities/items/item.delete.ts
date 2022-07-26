@@ -27,10 +27,10 @@ export const deleteItem = {
 
             await cloudinary.uploader
                .destroy(title, { overwrite: true, invalidate: true })
-               .then((reply: any) => {
+               .then((reply: string) => {
                   console.log(reply)
                })
-               .catch((error: any) => console.log(error))
+               .catch((error: string) => console.log(error))
 
             // DELETE Item by ID
             const deleteItem = await prisma.item.delete({

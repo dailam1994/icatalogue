@@ -32,11 +32,11 @@ export const createItem = {
                   public_id: title,
                   transformation: { width: 350, crop: "scale" },
                })
-               .then((reply: any) => {
+               .then((reply: { secure_url: string }) => {
                   secure_url = reply.secure_url
                   console.log(reply)
                })
-               .catch((error: any) => console.log(error))
+               .catch((error: string) => console.log(error))
 
             // CREATE Item
             const addItem = await prisma.item.create({

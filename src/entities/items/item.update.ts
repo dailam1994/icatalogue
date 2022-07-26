@@ -51,10 +51,10 @@ export const updateItem = {
                      overwrite: true,
                      transformation: { width: 350, crop: "scale" },
                   })
-                  .then((reply: any) => {
+                  .then((reply: { secure_url: string }) => {
                      secure_url = reply.secure_url
                   })
-                  .catch((error: any) => console.log(error))
+                  .catch((error: string) => console.log(error))
 
                // UPDATE Item by ID
                updateItem = await prisma.item.update({
