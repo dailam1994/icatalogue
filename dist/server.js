@@ -12,23 +12,30 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.prisma = exports.fastify = void 0;
+exports.bcrypt = exports.cloudinary = exports.prisma = exports.fastify = void 0;
 const fastify_1 = __importDefault(require("fastify"));
 const client_1 = require("@prisma/client");
 const fastify_bcrypt_plugin_1 = __importDefault(require("fastify-bcrypt-plugin"));
 const fastify_session_1 = __importDefault(require("fastify-session"));
 const fastify_cookie_1 = __importDefault(require("fastify-cookie"));
+const fastify_static_1 = __importDefault(require("fastify-static"));
 const fastify_rate_limit_1 = __importDefault(require("fastify-rate-limit"));
-const user_route_1 = require("./entities/user/user.route");
-const record_route_1 = require("./entities/record/record.route");
-const logging_route_1 = require("./entities/logging/logging.route");
-const blockip_route_1 = require("./entities/blockip/blockip.route");
-const whitelist_route_1 = require("./entities/whitelist/whitelist.route");
+const item_route_1 = require("./entities/items/item.route");
+const admin_route_1 = require("./entities/admins/admin.route");
 exports.fastify = (0, fastify_1.default)();
+const path = require("path");
 exports.prisma = new client_1.PrismaClient();
+exports.cloudinary = require("cloudinary").v2;
+exports.bcrypt = require("bcryptjs");
 /* Register Plugins */
 exports.fastify.register(require("fastify-cors"), {
-    origin: "https://technolashes.com",
+    origin: [
+        "http://localhost:5173",
+        "http://127.0.0.1:5173",
+        "http://127.0.0.1:5501",
+        "http://localhost:3000",
+        "http://0.0.0.0:5173",
+    ],
     methods: ["GET", "POST", "PUT", "DELETE"],
     credentials: true,
 });
@@ -42,7 +49,7 @@ exports.fastify.register(fastify_session_1.default, {
     saveUninitialized: true,
     cookie: {
         path: "/",
-        secure: true,
+        secure: false,
         httpOnly: false,
         maxAge: 30 * 60 * 1000,
         sameSite: "lax",
@@ -50,7 +57,7 @@ exports.fastify.register(fastify_session_1.default, {
 });
 // Rate Limits
 exports.fastify.register(fastify_rate_limit_1.default, {
-    max: 1,
+    max: 10,
     timeWindow: "0.5 second",
     // whitelist: ['127.0.0.1']
 });
@@ -59,64 +66,36 @@ exports.fastify.register(fastify_rate_limit_1.default, {
     timeWindow: "24 hour",
     // whitelist: ['127.0.0.1']
 });
+exports.fastify.register(fastify_static_1.default, {
+    root: path.join(__dirname, "dist"),
+    prefix: "/dist/", // optional: default '/'
+});
+exports.fastify.get("/", function (req, reply) {
+    reply.redirect("./dist/index.html"); // serving a file from a different root location
+});
 /* Register Routes */
-exports.fastify.register(user_route_1.userRouter);
-exports.fastify.register(record_route_1.recordRouter);
-exports.fastify.register(logging_route_1.loggingRouter);
-exports.fastify.register(blockip_route_1.blockipRouter);
-exports.fastify.register(whitelist_route_1.whitelistRouter);
+exports.fastify.register(item_route_1.itemRouter);
+exports.fastify.register(admin_route_1.adminRouter);
 /* Middleware for preHandler of application */
 exports.fastify.addHook("preHandler", (request, reply) => __awaiter(void 0, void 0, void 0, function* () {
-    let userLoggedIn = request.session.user !== undefined;
-    let allowedURLs = ["/api/user/login", "/api/user/auth"];
-    let blockList = [];
-    // Obtaining Block IP Data
-    const blockData = yield exports.prisma.blockip.findMany();
-    // Looping through each object and adding the ip to an empty Array
-    for (let i of blockData) {
-        blockList.push(i.ip);
-    }
-    if (blockList.includes(request.ip)) {
-        console.log("Your IP Address has been blocked from using the service");
-        reply.redirect("/api/user/login");
+    let userLoggedIn = request.session.admin !== undefined;
+    let allowedURLs = [
+        "/api/admin/login",
+        "/api/admin/auth",
+        "/api/items",
+        "/dist/index.html",
+        "/dist/assets/main.9b0ce834.js",
+        "/dist/assets/index.c4722732.css",
+        "/dist/assets/admin.route.a3fcd267.js",
+    ];
+    // Authentication Restriction
+    // Checking if user has logged in
+    if (userLoggedIn) {
+        console.log("Admin Logged In");
     }
     else {
-        // Authentication Restriction
-        // Checking if user has logged in
-        if (userLoggedIn) {
-            // GET User Logging Data by Username
-            const loggingData = yield exports.prisma.logging.findMany({
-                where: {
-                    username: request.session.user.username,
-                },
-            });
-            // Looping through the logging data
-            for (let i of loggingData) {
-                // Auto DELETE logging data that becomes stale after 1 day (recommended 10-30days)
-                if (new Date(new Date(i.timestamp).setDate(new Date(i.timestamp).getDate() + 1)) < new Date()) {
-                    yield exports.prisma.logging.deleteMany({
-                        where: {
-                            username: i.username,
-                        },
-                    });
-                }
-            }
-            // CREATE logging feature via every request w.r.t to a logged in user
-            yield exports.prisma.logging.create({
-                data: {
-                    ip: String(request.ip),
-                    session: String(JSON.stringify(request.session)),
-                    username: String(request.session.user.username),
-                    usertype: String(request.session.user.role),
-                    timestamp: String(new Date().toISOString()),
-                    action: String(request.method),
-                },
-            });
-        }
-        else {
-            if (!allowedURLs.includes(request.url)) {
-                reply.redirect("/api/user/login");
-            }
+        if (!allowedURLs.includes(request.url)) {
+            reply.redirect("/dist/index.html");
         }
     }
 }));

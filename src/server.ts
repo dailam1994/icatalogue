@@ -3,19 +3,27 @@ import { PrismaClient } from "@prisma/client"
 import fastifyBcrypt from "fastify-bcrypt-plugin"
 import fastifySession from "fastify-session"
 import fastifyCookie from "fastify-cookie"
+import fastifyStatic from "fastify-static"
+
 import rateLimit from "fastify-rate-limit"
-import { userRouter } from "./entities/user/user.route"
-import { recordRouter } from "./entities/record/record.route"
-import { loggingRouter } from "./entities/logging/logging.route"
-import { blockipRouter } from "./entities/blockip/blockip.route"
-import { whitelistRouter } from "./entities/whitelist/whitelist.route"
+import { itemRouter } from "./entities/items/item.route"
+import { adminRouter } from "./entities/admins/admin.route"
 
 export const fastify = Fastify()
+const path = require("path")
 export const prisma = new PrismaClient()
+export const cloudinary = require("cloudinary").v2
+export const bcrypt = require("bcryptjs")
 
 /* Register Plugins */
 fastify.register(require("fastify-cors"), {
-   origin: "https://technolashes.com",
+   origin: [
+      "http://localhost:5173",
+      "http://127.0.0.1:5173",
+      "http://127.0.0.1:5501",
+      "http://localhost:3000",
+      "http://0.0.0.0:5173",
+   ],
    methods: ["GET", "POST", "PUT", "DELETE"],
    credentials: true,
 })
@@ -31,7 +39,7 @@ fastify.register(fastifySession, {
    saveUninitialized: true,
    cookie: {
       path: "/",
-      secure: true, // Turning this on makes sure the HTTPS is a requirement
+      secure: false, // Turning this on makes sure the HTTPS is a requirement
       httpOnly: false, // Will not send cookie data to HTTP, only HTTPS allowed
       maxAge: 30 * 60 * 1000, // 30-minute sessions removes session automatically after set time
       sameSite: "lax",
@@ -40,7 +48,7 @@ fastify.register(fastifySession, {
 
 // Rate Limits
 fastify.register(rateLimit, {
-   max: 1,
+   max: 10,
    timeWindow: "0.5 second",
    // whitelist: ['127.0.0.1']
 })
@@ -51,69 +59,39 @@ fastify.register(rateLimit, {
    // whitelist: ['127.0.0.1']
 })
 
+fastify.register(fastifyStatic, {
+   root: path.join(__dirname, "dist"),
+   prefix: "/dist/", // optional: default '/'
+})
+
+fastify.get("/", function (req, reply) {
+   reply.redirect("./dist/index.html") // serving a file from a different root location
+})
+
 /* Register Routes */
-fastify.register(userRouter)
-fastify.register(recordRouter)
-fastify.register(loggingRouter)
-fastify.register(blockipRouter)
-fastify.register(whitelistRouter)
+fastify.register(itemRouter)
+fastify.register(adminRouter)
 
 /* Middleware for preHandler of application */
 fastify.addHook("preHandler", async (request, reply) => {
-   let userLoggedIn = request.session.user !== undefined
-   let allowedURLs = ["/api/user/login", "/api/user/auth"]
+   let userLoggedIn = request.session.admin !== undefined
+   let allowedURLs = [
+      "/api/admin/login",
+      "/api/admin/auth",
+      "/api/items",
+      "/dist/index.html",
+      "/dist/assets/main.9b0ce834.js",
+      "/dist/assets/index.c4722732.css",
+      "/dist/assets/admin.route.a3fcd267.js",
+   ]
 
-   let blockList = []
-
-   // Obtaining Block IP Data
-   const blockData = await prisma.blockip.findMany()
-
-   // Looping through each object and adding the ip to an empty Array
-   for (let i of blockData) {
-      blockList.push(i.ip)
-   }
-
-   if (blockList.includes(request.ip)) {
-      console.log("Your IP Address has been blocked from using the service")
-      reply.redirect("/api/user/login")
+   // Authentication Restriction
+   // Checking if user has logged in
+   if (userLoggedIn) {
+      console.log("Admin Logged In")
    } else {
-      // Authentication Restriction
-      // Checking if user has logged in
-      if (userLoggedIn) {
-         // GET User Logging Data by Username
-         const loggingData = await prisma.logging.findMany({
-            where: {
-               username: request.session.user.username,
-            },
-         })
-
-         // Looping through the logging data
-         for (let i of loggingData) {
-            // Auto DELETE logging data that becomes stale after 1 day (recommended 10-30days)
-            if (new Date(new Date(i.timestamp).setDate(new Date(i.timestamp).getDate() + 1)) < new Date()) {
-               await prisma.logging.deleteMany({
-                  where: {
-                     username: i.username,
-                  },
-               })
-            }
-         }
-
-         // CREATE logging feature via every request w.r.t to a logged in user
-         await prisma.logging.create({
-            data: {
-               ip: String(request.ip),
-               session: String(JSON.stringify(request.session)),
-               username: String(request.session.user.username),
-               usertype: String(request.session.user.role),
-               timestamp: String(new Date().toISOString()),
-               action: String(request.method),
-            },
-         })
-      } else {
-         if (!allowedURLs.includes(request.url)) {
-            reply.redirect("/api/user/login")
-         }
+      if (!allowedURLs.includes(request.url)) {
+         reply.redirect("/dist/index.html")
       }
    }
 })

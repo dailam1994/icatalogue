@@ -1,3 +1,6 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
 generator client {
   provider = "prisma-client-js"
 }
@@ -8,72 +11,22 @@ datasource db {
 }
 
 // Application Schema Models
-model user {
-  userID      String       @id @unique @default(uuid())
-  firstName   String       @db.VarChar(200)
-  lastName    String       @db.VarChar(200)
-  dateOfBirth DateTime     @db.Date
-  email       String       @unique @db.VarChar(200)
-  username    String       @unique @db.VarChar(200)
-  password    String       @db.VarChar(255)
-  roles       Role         @default(CLIENT)
-  changelog   changelog[]
-  recordList  recordList[]
+model admin {
+  adminID     String   @id @unique @default(uuid())
+  firstName   String   @db.VarChar(200)
+  lastName    String   @db.VarChar(200)
+  dateOfBirth DateTime @db.Date
+  email       String   @unique @db.VarChar(200)
+  username    String   @unique @db.VarChar(200)
+  password    String   @db.VarChar(255)
 }
 
-model recordList {
-  recordListID   String  @id @unique @default(uuid())
-  user           user?   @relation(fields: [userUserID], references: [userID], onDelete: Cascade)
-  userUserID     String?
-  record         record? @relation(fields: [recordRecordID], references: [recordID], onDelete: Cascade)
-  recordRecordID String?
-}
-
-model record {
-  recordID      String       @id @unique @default(uuid())
-  date          String       @db.VarChar(50)
-  start         String       @db.VarChar(50)
-  end           String       @db.VarChar(50)
-  firstService  String?      @db.VarChar(50)
-  secondService String?      @db.VarChar(50)
-  thirdService  String?      @db.VarChar(50)
-  fourthService String?      @db.VarChar(50)
-  fifthService  String?      @db.VarChar(50)
-  recordList    recordList[]
-  changelog     changelog[]
-}
-
-model changelog {
-  changelogID    String    @id @unique @default(uuid())
-  dateCreated    DateTime? @default(now())
-  dateChanged    DateTime? @default(now()) @updatedAt
-  userUserID     String?
-  user           user?     @relation(fields: [userUserID], references: [userID], onDelete: Cascade)
-  record         record?   @relation(fields: [recordRecordID], references: [recordID], onDelete: Cascade)
-  recordRecordID String?
-}
-
-model logging {
-  loggingID String  @id @unique @default(uuid())
-  ip        String  @db.VarChar(200)
-  session   String? @db.VarChar(500)
-  username  String? @db.VarChar(200)
-  usertype  String? @db.VarChar(200)
-  timestamp String  @db.VarChar(50)
-  action    String  @db.VarChar(50)
-}
-
-model blockip {
-  blockipID String @id @unique @default(uuid())
-  ip        String @unique @db.VarChar(50)
-}
-
-model whitelist {
-  whitelistID String @id @unique @default(uuid())
-  ip          String @unique @db.VarChar(50)
-}
-
-enum Role {
-  ADMIN
-  CLIENT
+model item {
+  itemID      String    @id @unique @default(uuid())
+  title       String    @unique @db.VarChar(200)
+  description String?   @db.VarChar(500)
+  quantity    Int       @db.SmallInt
+  price       Float     @db.DoublePrecision
+  url         String?   @unique @db.VarChar(200)
+  date        DateTime? @default(now()) @updatedAt
 }

@@ -27,17 +27,31 @@ sql file requires PostgresSQL running
 ## Multi-technology
 
 -  Node
+   - Used throughout the entire application
 -  Typescript
+   - Used throughout the entire application
 -  Fastify
+   - Used throughout the entire application
 -  Prisma
+   - Used throughout the entire application
 -  Postgres
+   - Used in "schema.prisma & .env" files
 
 ### Additional Information
 
 -  Supertest + Jest
--  Session, Cookie, Cors, Formbody, Rate Limit, Validator
+   - Used in "__test__" folders
+-  Bcrypt 
+   - Used in "server.js and (user) entity" folders and files
+- Session + Cookie 
+   - Used in "server.js and (user, whitelist, blockip & logging) entities" folders and files
+- Cors, Formbody & Rate Limit
+   - Used in "server.js" file
+- Validator
+   - Used in "server.js and (user, whitelist, blockip & record) entities" folders and files
 
 ### Version Control
+RECOMMENDED LASTET VERSION (DATE: (2022-05-29) [14:23])
 
 (2022-03-23) [14:04]
 
