@@ -39,7 +39,7 @@ fastify.register(fastifySession, {
    saveUninitialized: true,
    cookie: {
       path: "/",
-      secure: false, // Turning this on makes sure the HTTPS is a requirement
+      secure: true, // Turning this on makes sure the HTTPS is a requirement
       httpOnly: false, // Will not send cookie data to HTTP, only HTTPS allowed
       maxAge: 30 * 60 * 1000, // 30-minute sessions removes session automatically after set time
       sameSite: "lax",

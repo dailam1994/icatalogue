@@ -49,7 +49,7 @@ exports.fastify.register(fastify_session_1.default, {
     saveUninitialized: true,
     cookie: {
         path: "/",
-        secure: false,
+        secure: true,
         httpOnly: false,
         maxAge: 30 * 60 * 1000,
         sameSite: "lax",
