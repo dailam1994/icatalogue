@@ -21,42 +21,42 @@ exports.createItem = {
         },
     },
     handler: (request, reply) => __awaiter(void 0, void 0, void 0, function* () {
-        // if (request.session.authenticated === true) {
-        try {
-            const { title, description, quantity, price, url } = request.body;
-            let secure_url;
-            yield server_1.cloudinary.uploader
-                .upload(url, {
-                public_id: title,
-                transformation: { width: 350, crop: "scale", gravity: "auto", quality: "auto" },
-            })
-                .then((reply) => {
-                secure_url = reply.secure_url;
-                console.log(reply);
-            })
-                .catch((error) => console.log(error));
-            // CREATE Item
-            const addItem = yield server_1.prisma.item.create({
-                data: {
-                    title: String(title),
-                    description: String(description),
-                    quantity: Number(quantity),
-                    price: Number(price),
-                    url: String(secure_url),
-                    date: String(new Date().toISOString()),
-                },
-            });
-            if (!addItem) {
-                reply.status(400).send("Error Message: (400) Status");
+        if (request.session.authenticated === true) {
+            try {
+                const { title, description, quantity, price, url } = request.body;
+                let secure_url;
+                yield server_1.cloudinary.uploader
+                    .upload(url, {
+                    public_id: title,
+                    transformation: { width: 350, crop: "scale", quality: "auto" },
+                })
+                    .then((reply) => {
+                    secure_url = reply.secure_url;
+                    console.log(reply);
+                })
+                    .catch((error) => console.log(error));
+                // CREATE Item
+                const addItem = yield server_1.prisma.item.create({
+                    data: {
+                        title: String(title),
+                        description: String(description),
+                        quantity: Number(quantity),
+                        price: Number(price),
+                        url: String(secure_url),
+                        date: String(new Date().toISOString()),
+                    },
+                });
+                if (!addItem) {
+                    reply.status(400).send("Error Message: (400) Status");
+                }
+                reply.status(200).send(addItem);
+                console.log("Created new Item successfully!");
             }
-            reply.status(200).send(addItem);
-            console.log("Created new Item successfully!");
+            catch (error) {
+                reply.status(500).send("Error Message: (500) Status");
+                console.log(error);
+            }
         }
-        catch (error) {
-            reply.status(500).send("Error Message: (500) Status");
-            console.log(error);
-        }
-        // }
-        // reply.status(401).send("Error Message: (401) Status")
+        reply.status(401).send("Error Message: (401) Status");
     }),
 };

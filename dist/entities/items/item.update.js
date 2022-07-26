@@ -21,62 +21,62 @@ exports.updateItem = {
         },
     },
     handler: (request, reply) => __awaiter(void 0, void 0, void 0, function* () {
-        // if (request.session.authenticated === true) {
-        try {
-            const { id } = request.params;
-            const { title, description, quantity, price, url } = request.body;
-            let updateItem;
-            let secure_url;
-            if (request.body.url.startsWith("https")) {
-                // UPDATE Item by ID
-                updateItem = yield server_1.prisma.item.update({
-                    where: { itemID: String(id) },
-                    data: {
-                        title: String(title),
-                        description: String(description),
-                        quantity: Number(quantity),
-                        price: Number(price),
-                        url: String(url),
-                        date: String(new Date().toISOString()),
-                    },
-                });
+        if (request.session.authenticated === true) {
+            try {
+                const { id } = request.params;
+                const { title, description, quantity, price, url } = request.body;
+                let updateItem;
+                let secure_url;
+                if (request.body.url.startsWith("https")) {
+                    // UPDATE Item by ID
+                    updateItem = yield server_1.prisma.item.update({
+                        where: { itemID: String(id) },
+                        data: {
+                            title: String(title),
+                            description: String(description),
+                            quantity: Number(quantity),
+                            price: Number(price),
+                            url: String(url),
+                            date: String(new Date().toISOString()),
+                        },
+                    });
+                }
+                else {
+                    yield server_1.cloudinary.uploader
+                        .upload(url, {
+                        public_id: title,
+                        invalidate: true,
+                        overwrite: true,
+                        transformation: { width: 350, crop: "scale", quality: "auto" },
+                    })
+                        .then((reply) => {
+                        secure_url = reply.secure_url;
+                    })
+                        .catch((error) => console.log(error));
+                    // UPDATE Item by ID
+                    updateItem = yield server_1.prisma.item.update({
+                        where: { itemID: String(id) },
+                        data: {
+                            title: String(title),
+                            description: String(description),
+                            quantity: Number(quantity),
+                            price: Number(price),
+                            url: String(secure_url),
+                            date: String(new Date().toISOString()),
+                        },
+                    });
+                }
+                if (!updateItem) {
+                    reply.status(400).send("Error Message: (400) Status");
+                }
+                reply.status(200).send(updateItem);
+                console.log("Updated A Item successfully!");
             }
-            else {
-                yield server_1.cloudinary.uploader
-                    .upload(url, {
-                    public_id: title,
-                    invalidate: true,
-                    overwrite: true,
-                    transformation: { width: 350, crop: "scale", gravity: "auto", quality: "auto" },
-                })
-                    .then((reply) => {
-                    secure_url = reply.secure_url;
-                })
-                    .catch((error) => console.log(error));
-                // UPDATE Item by ID
-                updateItem = yield server_1.prisma.item.update({
-                    where: { itemID: String(id) },
-                    data: {
-                        title: String(title),
-                        description: String(description),
-                        quantity: Number(quantity),
-                        price: Number(price),
-                        url: String(secure_url),
-                        date: String(new Date().toISOString()),
-                    },
-                });
+            catch (error) {
+                reply.status(500).send("Error Message: (500) Status");
+                console.log(error);
             }
-            if (!updateItem) {
-                reply.status(400).send("Error Message: (400) Status");
-            }
-            reply.status(200).send(updateItem);
-            console.log("Updated A Item successfully!");
         }
-        catch (error) {
-            reply.status(500).send("Error Message: (500) Status");
-            console.log(error);
-        }
-        // }
-        // reply.status(401).send("Error Message: (401) Status")
+        reply.status(401).send("Error Message: (401) Status");
     }),
 };

@@ -20,33 +20,33 @@ export const deleteItem = {
       }>,
       reply: FastifyReply
    ) => {
-      // if (request.session.authenticated === true) {
-      try {
-         const { id, title } = request.body
-         console.log(request.body)
+      if (request.session.authenticated === true) {
+         try {
+            const { id, title } = request.body
+            console.log(request.body)
 
-         await cloudinary.uploader
-            .destroy(title, { overwrite: true, invalidate: true })
-            .then((reply: any) => {
-               console.log(reply)
+            await cloudinary.uploader
+               .destroy(title, { overwrite: true, invalidate: true })
+               .then((reply: any) => {
+                  console.log(reply)
+               })
+               .catch((error: any) => console.log(error))
+
+            // DELETE Item by ID
+            const deleteItem = await prisma.item.delete({
+               where: { itemID: String(id) },
             })
-            .catch((error: any) => console.log(error))
 
-         // DELETE Item by ID
-         const deleteItem = await prisma.item.delete({
-            where: { itemID: String(id) },
-         })
-
-         if (!deleteItem) {
-            reply.status(400).send("Error Message: (400) Status")
+            if (!deleteItem) {
+               reply.status(400).send("Error Message: (400) Status")
+            }
+            reply.status(200).send(`Item ${id} deleted successfully`)
+            console.log("Deleted Item successfully!")
+         } catch (error) {
+            reply.status(500).send("Error Message: (500) Status")
+            console.log(error)
          }
-         reply.status(200).send(`Item ${id} deleted successfully`)
-         console.log("Deleted Item successfully!")
-      } catch (error) {
-         reply.status(500).send("Error Message: (500) Status")
-         console.log(error)
       }
-      // }
-      // reply.status(401).send("Error Message: (401) Status")
+      reply.status(401).send("Error Message: (401) Status")
    },
 }

@@ -21,31 +21,31 @@ exports.deleteItem = {
         },
     },
     handler: (request, reply) => __awaiter(void 0, void 0, void 0, function* () {
-        // if (request.session.authenticated === true) {
-        try {
-            const { id, title } = request.body;
-            console.log(request.body);
-            yield server_1.cloudinary.uploader
-                .destroy(title, { overwrite: true, invalidate: true })
-                .then((reply) => {
-                console.log(reply);
-            })
-                .catch((error) => console.log(error));
-            // DELETE Item by ID
-            const deleteItem = yield server_1.prisma.item.delete({
-                where: { itemID: String(id) },
-            });
-            if (!deleteItem) {
-                reply.status(400).send("Error Message: (400) Status");
+        if (request.session.authenticated === true) {
+            try {
+                const { id, title } = request.body;
+                console.log(request.body);
+                yield server_1.cloudinary.uploader
+                    .destroy(title, { overwrite: true, invalidate: true })
+                    .then((reply) => {
+                    console.log(reply);
+                })
+                    .catch((error) => console.log(error));
+                // DELETE Item by ID
+                const deleteItem = yield server_1.prisma.item.delete({
+                    where: { itemID: String(id) },
+                });
+                if (!deleteItem) {
+                    reply.status(400).send("Error Message: (400) Status");
+                }
+                reply.status(200).send(`Item ${id} deleted successfully`);
+                console.log("Deleted Item successfully!");
             }
-            reply.status(200).send(`Item ${id} deleted successfully`);
-            console.log("Deleted Item successfully!");
+            catch (error) {
+                reply.status(500).send("Error Message: (500) Status");
+                console.log(error);
+            }
         }
-        catch (error) {
-            reply.status(500).send("Error Message: (500) Status");
-            console.log(error);
-        }
-        // }
-        // reply.status(401).send("Error Message: (401) Status")
+        reply.status(401).send("Error Message: (401) Status");
     }),
 };
