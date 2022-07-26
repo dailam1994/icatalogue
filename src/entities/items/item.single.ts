@@ -27,7 +27,7 @@ export const item = {
             reply.status(400).send("Error Message: (400) Status")
          }
          reply.status(200).send(item)
-         console.log("Read Item successfully!")
+         // console.log("Read Item successfully!")
       } catch (error) {
          reply.status(500).send("Error Message: (500) Status")
          console.log(error)

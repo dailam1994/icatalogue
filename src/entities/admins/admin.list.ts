@@ -22,7 +22,7 @@ export const allAdmins = {
                reply.status(400).send("Error Message: (400) Status")
             }
             reply.status(200).send(admins)
-            console.log("Read ALL Admins successfully!")
+            // console.log("Read ALL Admins successfully!")
          } catch (error) {
             reply.status(500).send("Error Message: (500) Status")
             console.log(error)

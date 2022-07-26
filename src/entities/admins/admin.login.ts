@@ -21,6 +21,8 @@ export const loginAdmin = {
    ) => {
       try {
          let { username, password } = request.body
+
+         // Obtaining Unqiue Admin User
          const admin = await prisma.admin.findUnique({
             where: { username: String(username) },
          })
@@ -29,14 +31,10 @@ export const loginAdmin = {
 
          // If Statement to handle password/hashPassword Comparison
          if (await fastify.bcrypt.compare(password, hashedPassword)) {
-            // Creating Authentication for User Session
-            request.session.authenticated = true
-
             let hashedAdmin: string | undefined = admin?.adminID
 
-            // Authentication restriction for Session when Use Logs In
-            // // Creating addtional User Session data
-
+            // Creating Authentication for User Session and Admin Data
+            request.session.authenticated = true
             request.session.admin = {
                adminId: hashedAdmin,
                username,

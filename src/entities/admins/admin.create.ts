@@ -1,5 +1,5 @@
 import { FastifyRequest, FastifyReply } from "fastify"
-import { fastify, prisma, bcrypt } from "../../server"
+import { fastify, prisma } from "../../server"
 import { modifyItem, Items } from "./admin.type"
 
 // POST an Admin
@@ -27,8 +27,6 @@ export const createAdmin = {
          try {
             const { firstName, lastName, dateOfBirth, email, username, password } = request.body
             // Perform password hashing
-            // const hashedPassword = await bcrypt.hash(password, 6)
-            // Perform password hashing
             const hashedPassword = await fastify.bcrypt.hash(password)
 
             // CREATE Admin
@@ -47,7 +45,7 @@ export const createAdmin = {
                reply.status(400).send("Error Message: (400) Status")
             }
             reply.status(200).send(addAdmin)
-            console.log("Created new Admin successfully!")
+            // console.log("Created new Admin successfully!")
          } catch (error) {
             reply.status(500).send("Error Message: (500) Status")
             console.log(error)

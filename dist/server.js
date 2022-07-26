@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.bcrypt = exports.cloudinary = exports.prisma = exports.fastify = void 0;
+exports.cloudinary = exports.prisma = exports.fastify = void 0;
 const fastify_1 = __importDefault(require("fastify"));
 const client_1 = require("@prisma/client");
 const fastify_bcrypt_plugin_1 = __importDefault(require("fastify-bcrypt-plugin"));
@@ -28,7 +28,6 @@ exports.fastify = (0, fastify_1.default)({
 const path = require("path");
 exports.prisma = new client_1.PrismaClient();
 exports.cloudinary = require("cloudinary").v2;
-exports.bcrypt = require("bcryptjs");
 /* Register Plugins */
 exports.fastify.register(require("fastify-cors"), {
     origin: [

@@ -4,7 +4,6 @@ import fastifyBcrypt from "fastify-bcrypt-plugin"
 import fastifySession from "fastify-session"
 import fastifyCookie from "fastify-cookie"
 import fastifyStatic from "fastify-static"
-
 import rateLimit from "fastify-rate-limit"
 import { itemRouter } from "./entities/items/item.route"
 import { adminRouter } from "./entities/admins/admin.route"
@@ -15,7 +14,6 @@ export const fastify = Fastify({
 const path = require("path")
 export const prisma = new PrismaClient()
 export const cloudinary = require("cloudinary").v2
-export const bcrypt = require("bcryptjs")
 
 /* Register Plugins */
 fastify.register(require("fastify-cors"), {

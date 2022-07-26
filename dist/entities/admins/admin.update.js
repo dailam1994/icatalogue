@@ -29,7 +29,6 @@ exports.updateAdmin = {
                 // If statement to handle if the password requires hashing
                 if (!password.startsWith("$2b$06$")) {
                     // Hashing updated user password
-                    // let hashedPassword = await fastify.bcrypt.hash(password, 6)
                     let hashedPassword = yield server_1.fastify.bcrypt.hash(password);
                     // UPDATE Admin by ID
                     updateAdmin = yield server_1.prisma.admin.update({
@@ -47,10 +46,10 @@ exports.updateAdmin = {
                         reply.status(400).send("Error Message: (400) Status");
                     }
                     reply.status(200).send(updateAdmin);
-                    console.log("Updated A Admin successfully!");
+                    // console.log("Updated A Admin successfully!")
                 }
                 else if (password.startsWith("$2b$06$")) {
-                    // UPDATE User by ID
+                    // UPDATE Admin by ID
                     updateAdmin = yield server_1.prisma.admin.update({
                         where: { adminID: String(id) },
                         data: {
@@ -67,7 +66,7 @@ exports.updateAdmin = {
                     reply.status(400).send("Error Message: (400) Status");
                 }
                 reply.status(200).send(updateAdmin);
-                console.log("Updated Admin successfully!");
+                // console.log("Updated Admin successfully!")
             }
             catch (error) {
                 reply.status(500).send("Error Message: (500) Status");

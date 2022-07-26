@@ -25,14 +25,15 @@ exports.createItem = {
             try {
                 const { title, description, quantity, price, url } = request.body;
                 let secure_url;
+                // Upload Image to Cloudinary
                 yield server_1.cloudinary.uploader
                     .upload(url, {
                     public_id: title,
                     transformation: { width: 350, crop: "scale" },
                 })
                     .then((reply) => {
+                    // Obtain and assign secure url
                     secure_url = reply.secure_url;
-                    console.log(reply);
                 })
                     .catch((error) => console.log(error));
                 // CREATE Item
@@ -50,7 +51,6 @@ exports.createItem = {
                     reply.status(400).send("Error Message: (400) Status");
                 }
                 reply.status(200).send(addItem);
-                console.log("Created new Item successfully!");
             }
             catch (error) {
                 reply.status(500).send("Error Message: (500) Status");

@@ -31,7 +31,7 @@ exports.deleteAdmin = {
                     reply.status(400).send("Error Message: (400) Status");
                 }
                 reply.status(200).send(`Admin ${id} deleted successfully`);
-                console.log("Deleted Admin successfully!");
+                // console.log("Deleted Admin successfully!")
             }
             catch (error) {
                 reply.status(500).send("Error Message: (500) Status");

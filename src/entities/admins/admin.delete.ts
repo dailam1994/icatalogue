@@ -18,6 +18,7 @@ export const deleteAdmin = {
       if (request.session.authenticated === true) {
          try {
             const { id } = request.params
+
             // DELETE Admin by ID
             const deleteAdmin = await prisma.admin.delete({
                where: { adminID: String(id) },
@@ -27,7 +28,7 @@ export const deleteAdmin = {
                reply.status(400).send("Error Message: (400) Status")
             }
             reply.status(200).send(`Admin ${id} deleted successfully`)
-            console.log("Deleted Admin successfully!")
+            // console.log("Deleted Admin successfully!")
          } catch (error) {
             reply.status(500).send("Error Message: (500) Status")
             console.log(error)

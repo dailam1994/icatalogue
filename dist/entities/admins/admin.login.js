@@ -23,17 +23,16 @@ exports.loginAdmin = {
     handler: (request, reply) => __awaiter(void 0, void 0, void 0, function* () {
         try {
             let { username, password } = request.body;
+            // Obtaining Unqiue Admin User
             const admin = yield server_1.prisma.admin.findUnique({
                 where: { username: String(username) },
             });
             let hashedPassword = admin === null || admin === void 0 ? void 0 : admin.password;
             // If Statement to handle password/hashPassword Comparison
             if (yield server_1.fastify.bcrypt.compare(password, hashedPassword)) {
-                // Creating Authentication for User Session
-                request.session.authenticated = true;
                 let hashedAdmin = admin === null || admin === void 0 ? void 0 : admin.adminID;
-                // Authentication restriction for Session when Use Logs In
-                // // Creating addtional User Session data
+                // Creating Authentication for User Session and Admin Data
+                request.session.authenticated = true;
                 request.session.admin = {
                     adminId: hashedAdmin,
                     username,

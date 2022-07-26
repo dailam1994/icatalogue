@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.authStatus = exports.loginStatus = exports.loginItem = exports.deleteItem = exports.modifyItem = exports.Items = void 0;
-/* User Types and Schema Validations */
+/* Admin Types and Schema Validations */
 exports.Items = {
     type: "object",
     properties: {

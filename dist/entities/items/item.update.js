@@ -27,6 +27,7 @@ exports.updateItem = {
                 const { title, description, quantity, price, url } = request.body;
                 let updateItem;
                 let secure_url;
+                // If statement to handle if image already exist
                 if (request.body.url.startsWith("https")) {
                     // UPDATE Item by ID
                     updateItem = yield server_1.prisma.item.update({
@@ -42,6 +43,7 @@ exports.updateItem = {
                     });
                 }
                 else {
+                    // Upload new image to Cloudinary
                     yield server_1.cloudinary.uploader
                         .upload(url, {
                         public_id: title,
@@ -50,6 +52,7 @@ exports.updateItem = {
                         transformation: { width: 350, crop: "scale" },
                     })
                         .then((reply) => {
+                        // Obtain and assign secure url
                         secure_url = reply.secure_url;
                     })
                         .catch((error) => console.log(error));
@@ -70,7 +73,7 @@ exports.updateItem = {
                     reply.status(400).send("Error Message: (400) Status");
                 }
                 reply.status(200).send(updateItem);
-                console.log("Updated A Item successfully!");
+                // console.log("Updated A Item successfully!")
             }
             catch (error) {
                 reply.status(500).send("Error Message: (500) Status");

@@ -27,14 +27,15 @@ export const createItem = {
             const { title, description, quantity, price, url } = request.body
             let secure_url
 
+            // Upload Image to Cloudinary
             await cloudinary.uploader
                .upload(url, {
                   public_id: title,
                   transformation: { width: 350, crop: "scale" },
                })
                .then((reply: { secure_url: string }) => {
+                  // Obtain and assign secure url
                   secure_url = reply.secure_url
-                  console.log(reply)
                })
                .catch((error: string) => console.log(error))
 
@@ -54,7 +55,6 @@ export const createItem = {
                reply.status(400).send("Error Message: (400) Status")
             }
             reply.status(200).send(addItem)
-            console.log("Created new Item successfully!")
          } catch (error) {
             reply.status(500).send("Error Message: (500) Status")
             console.log(error)

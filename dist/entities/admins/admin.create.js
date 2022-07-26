@@ -25,8 +25,6 @@ exports.createAdmin = {
             try {
                 const { firstName, lastName, dateOfBirth, email, username, password } = request.body;
                 // Perform password hashing
-                // const hashedPassword = await bcrypt.hash(password, 6)
-                // Perform password hashing
                 const hashedPassword = yield server_1.fastify.bcrypt.hash(password);
                 // CREATE Admin
                 const addAdmin = yield server_1.prisma.admin.create({
@@ -43,7 +41,7 @@ exports.createAdmin = {
                     reply.status(400).send("Error Message: (400) Status");
                 }
                 reply.status(200).send(addAdmin);
-                console.log("Created new Admin successfully!");
+                // console.log("Created new Admin successfully!")
             }
             catch (error) {
                 reply.status(500).send("Error Message: (500) Status");

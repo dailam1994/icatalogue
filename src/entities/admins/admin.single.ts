@@ -28,7 +28,7 @@ export const admin = {
                reply.status(400).send("Error Message: (400) Status")
             }
             reply.status(200).send(admin)
-            console.log("Read Admin successfully!")
+            // console.log("Read Admin successfully!")
          } catch (error) {
             reply.status(500).send("Error Message: (500) Status")
             console.log(error)

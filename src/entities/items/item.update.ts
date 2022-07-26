@@ -30,6 +30,7 @@ export const updateItem = {
             let updateItem
             let secure_url
 
+            // If statement to handle if image already exist
             if (request.body.url.startsWith("https")) {
                // UPDATE Item by ID
                updateItem = await prisma.item.update({
@@ -44,6 +45,7 @@ export const updateItem = {
                   },
                })
             } else {
+               // Upload new image to Cloudinary
                await cloudinary.uploader
                   .upload(url, {
                      public_id: title,
@@ -52,6 +54,7 @@ export const updateItem = {
                      transformation: { width: 350, crop: "scale" },
                   })
                   .then((reply: { secure_url: string }) => {
+                     // Obtain and assign secure url
                      secure_url = reply.secure_url
                   })
                   .catch((error: string) => console.log(error))
@@ -74,7 +77,7 @@ export const updateItem = {
                reply.status(400).send("Error Message: (400) Status")
             }
             reply.status(200).send(updateItem)
-            console.log("Updated A Item successfully!")
+            // console.log("Updated A Item successfully!")
          } catch (error) {
             reply.status(500).send("Error Message: (500) Status")
             console.log(error)

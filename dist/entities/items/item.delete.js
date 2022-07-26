@@ -24,7 +24,7 @@ exports.deleteItem = {
         if (request.session.authenticated === true) {
             try {
                 const { id, title } = request.body;
-                console.log(request.body);
+                // Deleting stored image from Cloudinary
                 yield server_1.cloudinary.uploader
                     .destroy(title, { overwrite: true, invalidate: true })
                     .then((reply) => {
@@ -39,7 +39,7 @@ exports.deleteItem = {
                     reply.status(400).send("Error Message: (400) Status");
                 }
                 reply.status(200).send(`Item ${id} deleted successfully`);
-                console.log("Deleted Item successfully!");
+                // console.log("Deleted Item successfully!")
             }
             catch (error) {
                 reply.status(500).send("Error Message: (500) Status");

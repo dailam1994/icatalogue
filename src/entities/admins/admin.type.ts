@@ -1,4 +1,4 @@
-/* User Types and Schema Validations */
+/* Admin Types and Schema Validations */
 export const Items = {
    type: "object",
    properties: {

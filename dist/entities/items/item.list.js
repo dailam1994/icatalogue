@@ -34,7 +34,7 @@ exports.allItems = {
                 reply.status(400).send("Error Message: (400) Status");
             }
             reply.status(200).send(items);
-            console.log("Read ALL Items successfully!");
+            // console.log("Read ALL Items successfully!")
         }
         catch (error) {
             reply.status(500).send("Error Message: (500) Status");

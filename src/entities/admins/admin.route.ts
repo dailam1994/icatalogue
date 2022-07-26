@@ -1,5 +1,4 @@
 import { FastifyInstance } from "fastify"
-import { fastify } from "../../server"
 import { authAdmin } from "./admin.auth"
 import { createAdmin } from "./admin.create"
 import { deleteAdmin } from "./admin.delete"
