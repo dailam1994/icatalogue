@@ -47,7 +47,7 @@ exports.updateItem = {
                         public_id: title,
                         invalidate: true,
                         overwrite: true,
-                        // transformation: { width: 350, crop: "scale", quality: "auto" },
+                        transformation: { width: 350, crop: "scale" },
                     })
                         .then((reply) => {
                         secure_url = reply.secure_url;
