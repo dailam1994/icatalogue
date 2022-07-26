@@ -85,9 +85,9 @@ exports.fastify.addHook("preHandler", (request, reply) => __awaiter(void 0, void
         "/api/admin/auth",
         "/api/items",
         "/dist/index.html",
-        "/dist/assets/main.b4287efc.js",
+        "/dist/assets/main.cb39a31f.js",
         "/dist/assets/index.c4722732.css",
-        "/dist/assets/admin.route.78ac63d1.js",
+        "/dist/assets/admin.route.39945e69.js", // Update this on frontend rebuild
     ];
     // Authentication Restriction
     // Checking if user has logged in
