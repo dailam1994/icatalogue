@@ -22,7 +22,9 @@ const fastify_static_1 = __importDefault(require("fastify-static"));
 const fastify_rate_limit_1 = __importDefault(require("fastify-rate-limit"));
 const item_route_1 = require("./entities/items/item.route");
 const admin_route_1 = require("./entities/admins/admin.route");
-exports.fastify = (0, fastify_1.default)();
+exports.fastify = (0, fastify_1.default)({
+    bodyLimit: 10000000,
+});
 const path = require("path");
 exports.prisma = new client_1.PrismaClient();
 exports.cloudinary = require("cloudinary").v2;
