@@ -27,6 +27,12 @@ const path = require("path");
 exports.prisma = new client_1.PrismaClient();
 exports.cloudinary = require("cloudinary").v2;
 exports.bcrypt = require("bcryptjs");
+exports.cloudinary.config({
+    cloud_name: "lqd2708",
+    api_key: "196971527266931",
+    api_secret: "_frLEAbr5zJjkSK3taqOq-VB6Ds",
+    secure: true,
+});
 /* Register Plugins */
 exports.fastify.register(require("fastify-cors"), {
     origin: [
@@ -49,7 +55,7 @@ exports.fastify.register(fastify_session_1.default, {
     saveUninitialized: true,
     cookie: {
         path: "/",
-        secure: true,
+        secure: false,
         httpOnly: false,
         maxAge: 30 * 60 * 1000,
         sameSite: "lax",

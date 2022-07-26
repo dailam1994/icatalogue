@@ -15,6 +15,13 @@ export const prisma = new PrismaClient()
 export const cloudinary = require("cloudinary").v2
 export const bcrypt = require("bcryptjs")
 
+// cloudinary.config({
+//    cloud_name: "lqd2708",
+//    api_key: "196971527266931",
+//    api_secret: "_frLEAbr5zJjkSK3taqOq-VB6Ds",
+//    secure: true,
+// })
+
 /* Register Plugins */
 fastify.register(require("fastify-cors"), {
    origin: [
@@ -39,7 +46,7 @@ fastify.register(fastifySession, {
    saveUninitialized: true,
    cookie: {
       path: "/",
-      secure: true, // Turning this on makes sure the HTTPS is a requirement
+      secure: false, // Turning this on makes sure the HTTPS is a requirement
       httpOnly: false, // Will not send cookie data to HTTP, only HTTPS allowed
       maxAge: 30 * 60 * 1000, // 30-minute sessions removes session automatically after set time
       sameSite: "lax",
