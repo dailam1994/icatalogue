@@ -28,7 +28,10 @@ export const createItem = {
          let secure_url
 
          await cloudinary.uploader
-            .upload(url, { public_id: title })
+            .upload(url, {
+               public_id: title,
+               transformation: { width: 350, crop: "scale", gravity: "auto", quality: "auto" },
+            })
             .then((reply: any) => {
                secure_url = reply.secure_url
                console.log(reply)

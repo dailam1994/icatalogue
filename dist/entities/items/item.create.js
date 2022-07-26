@@ -26,7 +26,10 @@ exports.createItem = {
             const { title, description, quantity, price, url } = request.body;
             let secure_url;
             yield server_1.cloudinary.uploader
-                .upload(url, { public_id: title })
+                .upload(url, {
+                public_id: title,
+                transformation: { width: 350, crop: "scale", gravity: "auto", quality: "auto" },
+            })
                 .then((reply) => {
                 secure_url = reply.secure_url;
                 console.log(reply);

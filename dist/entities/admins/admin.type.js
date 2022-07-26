@@ -36,8 +36,8 @@ exports.loginItem = {
     type: "object",
     required: ["username", "password"],
     properties: {
-        username: { type: "string" },
-        password: { type: "string" },
+        username: { type: "string", pattern: "^[a-zA-Z0-9]{3,255}$" },
+        password: { type: "string", pattern: "^((?=\\S*?[A-Z])(?=\\S*?[a-z])(?=\\S*?[0-9]).{6,})\\S$" },
     },
 };
 exports.loginStatus = {

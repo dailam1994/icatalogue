@@ -45,7 +45,12 @@ export const updateItem = {
             })
          } else {
             await cloudinary.uploader
-               .upload(url, { public_id: title, invalidate: true, overwrite: true })
+               .upload(url, {
+                  public_id: title,
+                  invalidate: true,
+                  overwrite: true,
+                  transformation: { width: 350, crop: "scale", gravity: "auto", quality: "auto" },
+               })
                .then((reply: any) => {
                   secure_url = reply.secure_url
                })
