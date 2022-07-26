@@ -8,8 +8,12 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.loginAdmin = void 0;
+const validator_1 = __importDefault(require("validator"));
 const server_1 = require("../../server");
 const admin_type_1 = require("./admin.type");
 // POST Login Admin
@@ -25,11 +29,11 @@ exports.loginAdmin = {
             let { username, password } = request.body;
             // Obtaining Unqiue Admin User
             const admin = yield server_1.prisma.admin.findUnique({
-                where: { username: String(username) },
+                where: { username: validator_1.default.escape(String(username)) },
             });
             let hashedPassword = admin === null || admin === void 0 ? void 0 : admin.password;
             // If Statement to handle password/hashPassword Comparison
-            if (yield server_1.fastify.bcrypt.compare(password, hashedPassword)) {
+            if (yield server_1.fastify.bcrypt.compare(validator_1.default.escape(password), hashedPassword)) {
                 let hashedAdmin = admin === null || admin === void 0 ? void 0 : admin.adminID;
                 // Creating Authentication for User Session and Admin Data
                 request.session.authenticated = true;

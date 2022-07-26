@@ -1,4 +1,5 @@
 import { FastifyRequest, FastifyReply } from "fastify"
+import validator from "validator"
 import { fastify, prisma } from "../../server"
 import { loginItem, loginStatus } from "./admin.type"
 
@@ -24,13 +25,13 @@ export const loginAdmin = {
 
          // Obtaining Unqiue Admin User
          const admin = await prisma.admin.findUnique({
-            where: { username: String(username) },
+            where: { username: validator.escape(String(username)) },
          })
 
          let hashedPassword = admin?.password as string
 
          // If Statement to handle password/hashPassword Comparison
-         if (await fastify.bcrypt.compare(password, hashedPassword)) {
+         if (await fastify.bcrypt.compare(validator.escape(password), hashedPassword)) {
             let hashedAdmin: string | undefined = admin?.adminID
 
             // Creating Authentication for User Session and Admin Data
