@@ -20,8 +20,6 @@ npm run preview - Running the application in production mode
 - React Hook Form, React Router
 
 ## Additonal Information
-Username - ['jSmith', 'sJones']
-Password - ['Password!23']
 
 ### Version Control
 [2022-07-20] (18:48)

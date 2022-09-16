@@ -21,8 +21,6 @@ sql file requires PostgresSQL running
 - Other (UUID, Typescript, Validator)
 
 ### Additional Information
-Usernames - ['jSmith', 'sJones']
-Password - ['Password!23']
 
 ### Version Control
 (2022-07-19) [19:21]
