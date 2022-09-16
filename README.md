@@ -18,7 +18,7 @@ sql file requires PostgresSQL running
 - Fastify (formbody, session, bcrypt, rate-limit, cookie, cors, static)
 - Prisma (studio)
 - Cloudinary
-- Other (UUID, Typescript)
+- Other (UUID, Typescript, Validator)
 
 ### Additional Information
 Usernames - ['jSmith', 'sJones']
